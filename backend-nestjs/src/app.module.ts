@@ -1,13 +1,23 @@
-import { Module } from '@nestjs/common';
+import {Module} from '@nestjs/common';
 import {AuthModule} from "./auth/auth.module";
-import { UserModule } from './user/user.module';
+import {UserModule} from './user/user.module';
+import {BookmarkModule} from './bookmark/bookmark.module';
+import { PrismaModule } from './prisma/prisma.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-      AuthModule,
-      UserModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    AuthModule,
+    UserModule,
+    BookmarkModule,
+    PrismaModule,
   ],
   controllers: [],
   providers: [],
 })
 export class AppModule {}
+
+// TODO Implement config module in /src/ for erroring reasons (has to be string .. etc)
