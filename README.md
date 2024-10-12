@@ -27,4 +27,14 @@ NestJS:
 npm install -g @nestjs/cli
 ```
 
+Docker
+
+Postgresql
+
+Prisma
+
+Passport (supported by nestJS) 
+
+JWT
+
 ### Installation
