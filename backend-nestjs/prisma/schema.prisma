@@ -7,30 +7,48 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// TODO Change hash to password
 model User {
   id          Int      @id @default(autoincrement())
   email       String   @unique
   hash        String
   createdAt   DateTime @default(now())
+
   firstname   String?
   lastname    String?
   displayName String?  @unique
 
-  bookmarks Bookmark[]
+  transactions Transaction[]
+  balance Balance?
 
   @@map("users")
 }
 
-model Bookmark {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime
-  title       String
+model Transaction {
+  id Int @id @default(autoincrement())
+  amount Float
+  type String // 'income' || 'expense'
+  title String?
   description String?
-  link        String
+  date DateTime
 
-  userId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int @unique
   user User @relation(fields: [userId], references: [id])
 
-  @@map("bookmarks")
+  @@map("transactions")
+}
+
+model Balance {
+  id Int @id @default(autoincrement())
+  total Float @default(0.0)
+
+  updatedAt DateTime @updatedAt
+
+  userId Int @unique
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("balance")
 }
