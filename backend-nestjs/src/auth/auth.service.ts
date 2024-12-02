@@ -10,25 +10,27 @@ import { ConfigService } from '@nestjs/config';
 export class AuthService {
   constructor(private prismaService: PrismaService,
               private jwt: JwtService,
-              private config: ConfigService) {}
+              private configService: ConfigService) {}
 
   async signUp(dto: AuthDto) {
     // generate the password hash
     const hash = await argon.hash(dto.password);
     // save the new user in the db
     try {
-      const user = await this.prismaService.user.create({
-        data: {
-          email: dto.email,
-          hash,
-        },
-        /*
-              select: {
-                id: true,
-                email: true,
-                createdAt: true,
-              }
-        */
+      const user = await this.prismaService.$transaction(async (tx) => {
+        const createdUser = await tx.user.create({
+          data: {
+            email: dto.email,
+            hash,
+          },
+        });
+        await tx.balance.create({
+          data: {
+            total: 0.0,
+            userId: createdUser.id
+          }
+        });
+        return createdUser;
       });
       // return the saved user
       return this.signToken(user.id, user.email);
@@ -44,7 +46,7 @@ export class AuthService {
     }
   }
 
-  async signIn(dto: AuthDto) {
+  async login(dto: AuthDto) {
     // find the user by email
     const user = await this.prismaService.user.findUnique({
       where: {
@@ -74,7 +76,7 @@ export class AuthService {
       email
     };
 
-    const secret = this.config.get('JWT_SECRET');
+    const secret = this.configService.get('JWT_SECRET');
 
     const token = await this.jwt.signAsync(payload, {
       expiresIn: '15m',
@@ -84,7 +86,5 @@ export class AuthService {
     return {
       access_token: token,
     };
-
   }
-
 }
