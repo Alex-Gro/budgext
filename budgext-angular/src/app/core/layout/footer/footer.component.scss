@@ -1,0 +1,11 @@
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.footer-links button {
+  margin-left: 10px;
+  text-transform: none; /* Prevents automatic capitalization of material buttons */
+}

@@ -1,0 +1,30 @@
+<mat-card class="login-card">
+  <h2>Login</h2>
+  <form [formGroup]="loginForm">
+    <mat-form-field class="full-width">
+      <mat-label>E-Mail-Adresse</mat-label>
+      <input matInput formControlName="email" type="email" placeholder="E-Mail eingeben" required/>
+
+      @if (loginForm.get('email')?.hasError('required')) {
+        <mat-error>E-Mail eingeben</mat-error>
+      } @else if (loginForm.get('email')?.hasError('email')) {
+        <mat-error>Bitte gültige E-Mail eingeben</mat-error>
+      }
+
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Passwort</mat-label>
+      <input matInput formControlName="password" type="password" placeholder="Passwort eingeben" required />
+
+      @if (loginForm.get('password')?.hasError('required')) {
+        <mat-error>Passwort eingeben</mat-error>
+      } @else if (loginForm.get('password')?.hasError('minlength')) {
+        <mat-error>Passwort zu kurz</mat-error>
+      }
+
+    </mat-form-field>
+
+    <button mat-flat-button class="full-width" (click)="login()">Login</button>
+  </form>
+</mat-card>

@@ -21,6 +21,7 @@
   - [x] getTransactionById
 - [x] Transaction test cases
 - [ ] Dynamically update current balance after transaction CRUD
+- [x] Add .env.test to .gitignore
 
 ## Ideas for future features
 - [ ] Add recurring transactions

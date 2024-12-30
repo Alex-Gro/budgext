@@ -1,0 +1,19 @@
+.logo-router {
+  display: inline-block;
+  cursor: pointer;
+  img {
+    transition: transform 0.2s ease;
+  }
+  &:hover img {
+    transform: scale(1.025);
+  }
+}
+
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.margin-right-16 {
+  margin-right: 16px;
+}
