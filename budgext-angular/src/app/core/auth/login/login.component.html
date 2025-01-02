@@ -25,6 +25,6 @@
 
     </mat-form-field>
 
-    <button mat-flat-button class="full-width" (click)="login()">Login</button>
+    <button mat-flat-button class="full-width" (click)="login()" [disabled]="loginForm.invalid">Login</button>
   </form>
 </mat-card>

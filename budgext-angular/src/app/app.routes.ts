@@ -13,4 +13,8 @@ export const routes: Routes = [
     path: 'signup',
     loadComponent: () => import('./core/auth/signup/signup.component').then((c) => c.SignupComponent)
   },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./features/dashboard/dashboard.component').then((c) => c.DashboardComponent)
+  },
 ];

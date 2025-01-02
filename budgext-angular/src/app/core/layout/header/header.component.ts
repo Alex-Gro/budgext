@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatToolbar } from '@angular/material/toolbar';
+import { UserService } from '../../auth/services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -18,11 +19,13 @@ import { MatToolbar } from '@angular/material/toolbar';
 export class HeaderComponent {
   isLoggedIn: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private userService: UserService) {
+    const abc = sessionStorage.getItem('accessToken');
+    this.isLoggedIn = !!abc;
+  }
 
-  // TODO Implement logout method
-  logout() {
+  logout(): void {
     this.isLoggedIn = false;
-    this.router.navigate(['/login']);
+    this.userService.logout();
   }
 }
