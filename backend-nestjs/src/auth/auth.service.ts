@@ -5,6 +5,7 @@ import * as argon from 'argon2'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,7 @@ export class AuthService {
     const hash = await argon.hash(dto.password);
     // save the new user in the db
     try {
-      const user = await this.prismaService.$transaction(async (tx) => {
+      const user: User = await this.prismaService.$transaction(async (tx) => {
         const createdUser = await tx.user.create({
           data: {
             email: dto.email,
@@ -33,7 +34,7 @@ export class AuthService {
         return createdUser;
       });
       // return the saved user
-      return this.signToken(user.id, user.email);
+      return this.signToken(user);
     } catch(error) {
       if (error instanceof PrismaClientKnownRequestError) {
         // Error Code for trying record with unique field (i.e. user.email) | can look it up in nestJS doc's
@@ -48,7 +49,7 @@ export class AuthService {
 
   async login(dto: AuthDto) {
     // find the user by email
-    const user = await this.prismaService.user.findUnique({
+    const user: User = await this.prismaService.user.findUnique({
       where: {
         email: dto.email,
       }
@@ -67,13 +68,15 @@ export class AuthService {
       throw new ForbiddenException('Credentials incorrect');
     }
     // send back the user
-    return this.signToken(user.id, user.email);
+    return this.signToken(user);
   }
 
-  async signToken(userId: number, email: string): Promise<{access_token: string}> {
+  async signToken(user: User): Promise<{access_token: string, user: User}> {
+    delete user.hash;
+
     const payload = {
-      sub: userId,
-      email
+      sub: user.id,
+      email: user.email
     };
 
     const secret = this.configService.get('JWT_SECRET');
@@ -85,6 +88,7 @@ export class AuthService {
 
     return {
       access_token: token,
+      user,
     };
   }
 }

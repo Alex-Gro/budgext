@@ -1,7 +1,5 @@
 import {
-  APP_INITIALIZER,
-  ApplicationConfig,
-  Inject,
+  ApplicationConfig, inject,
   provideAppInitializer,
   provideZoneChangeDetection,
 } from '@angular/core';
@@ -15,9 +13,10 @@ import { JwtService } from './core/auth/services/jwt.service';
 import { UserService } from './core/auth/services/user.service';
 import { EMPTY } from 'rxjs';
 import { errorInterceptor } from './core/auth/interceptors/error.interceptor';
+import { apiInterceptor } from './core/auth/interceptors/api.interceptor';
 
 export function initAuth(jwtService: JwtService, userService: UserService) {
-  return EMPTY;
+  return jwtService.getToken() ? userService.getCurrentUser() : EMPTY;
 }
 
 export const appConfig: ApplicationConfig = {
@@ -27,8 +26,8 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(
       withFetch(),
-      withInterceptors([tokenInterceptor, errorInterceptor])
+      withInterceptors([tokenInterceptor, errorInterceptor, apiInterceptor])
     ),
-    provideAppInitializer(() => initAuth(Inject(JwtService), Inject(UserService))),
+    provideAppInitializer(() => initAuth(inject(JwtService), inject(UserService))),
   ],
 };

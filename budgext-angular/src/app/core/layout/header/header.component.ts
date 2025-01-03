@@ -20,6 +20,7 @@ export class HeaderComponent {
   isLoggedIn: boolean = false;
 
   constructor(private userService: UserService) {
+    // TODO Make better - abstract this with directive maybe?
     const abc = sessionStorage.getItem('accessToken');
     this.isLoggedIn = !!abc;
   }
