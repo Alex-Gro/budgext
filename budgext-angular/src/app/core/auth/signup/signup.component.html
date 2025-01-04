@@ -1,1 +1,25 @@
-<p>signup works!</p>
+<mat-card class="signin-card">
+  <h2>Register</h2>
+  <form [formGroup]="signinForm">
+    <mat-form-field class="full-width">
+      <mat-label>E-Mail-Adresse</mat-label>
+      <input matInput formControlName="email" type="email" placeholder="E-Mail eingeben" required/>
+      @if (signinForm.get('email')?.hasError('required')) {
+        <mat-error>E-Mail eingeben</mat-error>
+      } @else if (signinForm.get('email')?.hasError('email')) {
+        <mat-error>Bitte gültige E-Mail eingeben</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Passwort</mat-label>
+      <input matInput formControlName="password" type="password" placeholder="Passwort eingeben" required />
+      @if (signinForm.get('password')?.hasError('required')) {
+        <mat-error>Passwort eingeben</mat-error>
+      } @else if (signinForm.get('password')?.hasError('minlength')) {
+        <mat-error>Passwort zu kurz</mat-error>
+      }
+    </mat-form-field>
+    <button mat-flat-button class="full-width" (click)="signin()" [disabled]="signinForm.invalid">Login</button>
+  </form>
+</mat-card>

@@ -7,6 +7,7 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   // DTO - Data Transfer Object: Transfer data between different layers of an application (Pattern)
+  @HttpCode(HttpStatus.CREATED)
   @Post('signup')
   signUp(@Body() dto: AuthDto) {
     return this.authService.signUp(dto);

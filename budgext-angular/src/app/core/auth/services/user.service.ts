@@ -21,6 +21,13 @@ export class UserService {
               private jwtService: JwtService,
               private router: Router) {}
 
+  signup(email: string, password: string): Observable<any> {
+    return this.http.post<UserAuthResponse>('/auth/signup', {email, password})
+      .pipe(tap((res: UserAuthResponse) => {
+        this.setAuth(res);
+      }));
+  }
+
   /**
    * Logs in a user if credentials are correct (email, password).
    * Calls {@link setAuth} to save possible sensitive data (jwt, user)

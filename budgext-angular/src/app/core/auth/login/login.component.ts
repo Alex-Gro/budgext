@@ -57,7 +57,7 @@ export class LoginComponent {
         let observable = this.userService.login(email, password);
         observable.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
           next: () => void this.router.navigate(['/dashboard/']),
-          error: (err) => {
+          error: (err: any) => {
             // TODO Handle error in GUI?
             console.log('####');
             console.log(err);
