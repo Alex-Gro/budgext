@@ -1,5 +1,5 @@
 <mat-card class="signin-card">
-  <h2>Register</h2>
+  <h2>Registrieren</h2>
   <form [formGroup]="signinForm">
     <mat-form-field class="full-width">
       <mat-label>E-Mail-Adresse</mat-label>
@@ -20,6 +20,6 @@
         <mat-error>Passwort zu kurz</mat-error>
       }
     </mat-form-field>
-    <button mat-flat-button class="full-width" (click)="signin()" [disabled]="signinForm.invalid">Login</button>
+    <button mat-flat-button class="full-width" (click)="signin()" [disabled]="signinForm.invalid">Registrieren</button>
   </form>
 </mat-card>

@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, map, Observable, tap } from 'rxjs';
 import { JwtService } from './jwt.service';
 import { Router } from '@angular/router';
 import { User } from '../user.model';
 
+/**
+ * Provides the interface of the response after a token gets requested
+ */
 export interface UserAuthResponse {
   access_token: string;
   user: User;
@@ -14,8 +17,10 @@ export interface UserAuthResponse {
   providedIn: 'root'
 })
 export class UserService {
-
   private currentUserSubject = new BehaviorSubject<User | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable().pipe(distinctUntilChanged());
+
+  public userAuthenticated = this.currentUser$.pipe(map((user) => !!user));
 
   constructor(private http: HttpClient,
               private jwtService: JwtService,

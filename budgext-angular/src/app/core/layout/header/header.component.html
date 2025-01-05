@@ -6,11 +6,12 @@
   </span>
 
   <span class="spacer"></span>
-  @if (isLoggedIn) {
-    <button class="margin-right-16" mat-stroked-button routerLink="">Features</button>
-    <button mat-stroked-button routerLink="/logout" (click)="logout()">Logout</button>
-  } @else {
-    <button class="margin-right-16" mat-stroked-button routerLink="/login">Login</button>
-    <button mat-flat-button routerLink="/signup">Registrieren</button>
-  }
+    <ng-container *ifAuthenticated="true">
+      <button class="margin-right-16" mat-stroked-button routerLink="">Features</button>
+      <button mat-stroked-button routerLink="/logout" (click)="logout()">Logout</button>
+    </ng-container>
+    <ng-container *ifAuthenticated="false">
+      <button class="margin-right-16" mat-stroked-button routerLink="/login">Login</button>
+      <button mat-flat-button routerLink="/signup">Registrieren</button>
+    </ng-container>
 </mat-toolbar>

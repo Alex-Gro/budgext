@@ -4,6 +4,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatToolbar } from '@angular/material/toolbar';
 import { UserService } from '../../auth/services/user.service';
+import { IfAuthenticatedDirective } from '../../auth/if-authenticated.directive';
 
 @Component({
   selector: 'app-header',
@@ -12,6 +13,7 @@ import { UserService } from '../../auth/services/user.service';
     MatButton,
     RouterLink,
     MatToolbar,
+    IfAuthenticatedDirective,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
