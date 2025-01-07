@@ -19,16 +19,9 @@ import { IfAuthenticatedDirective } from '../../auth/if-authenticated.directive'
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  isLoggedIn: boolean = false;
-
-  constructor(private userService: UserService) {
-    // TODO Make better - abstract this with directive maybe?
-    const abc = sessionStorage.getItem('accessToken');
-    this.isLoggedIn = !!abc;
-  }
+  constructor(private userService: UserService) {}
 
   logout(): void {
-    this.isLoggedIn = false;
     this.userService.logout();
   }
 }

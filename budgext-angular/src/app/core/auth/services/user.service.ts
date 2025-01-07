@@ -17,15 +17,26 @@ export interface UserAuthResponse {
   providedIn: 'root'
 })
 export class UserService {
+  /** Holds the current user (state), initially null */
   private currentUserSubject = new BehaviorSubject<User | null>(null);
+
+  /** Exposes the currentUser observable, emitting only distinct values */
   public currentUser$ = this.currentUserSubject.asObservable().pipe(distinctUntilChanged());
 
+  /** Checks if a user is authenticated (based on currentUser) */
   public userAuthenticated = this.currentUser$.pipe(map((user) => !!user));
 
   constructor(private http: HttpClient,
               private jwtService: JwtService,
               private router: Router) {}
 
+  /**
+   * Signs up a new user with the provided email and password.
+   * If the signup is successful, the authentication data (JWT token and user) is saved.
+   * @param email - The email address of the user
+   * @param password - The password chosen by the user
+   * @returns Observable - Emits the response containing authentication data (JWT token and user)
+   */
   signup(email: string, password: string): Observable<any> {
     return this.http.post<UserAuthResponse>('/auth/signup', {email, password})
       .pipe(tap((res: UserAuthResponse) => {
@@ -38,6 +49,7 @@ export class UserService {
    * Calls {@link setAuth} to save possible sensitive data (jwt, user)
    * @param email - Email entered by the user
    * @param password - Password entered by the user
+   * @returns Observable - Emits the response containing authentication data (JWT token and user)
    */
   login(email: string, password: string): Observable<any> {
     return this.http.post<UserAuthResponse>('/auth/login', {email, password})
@@ -55,14 +67,21 @@ export class UserService {
   }
 
   /**
-   * Requests the current user from the backend.
-   * If an error occurs, all gets purged
+   * Fetches the current user from the backend.
+   * If the request is successful, updates the current user state.
+   * If an error occurs, purges the authentication data (e.g., JWT, user).
+   *
+   * @returns Observable<User> - Emits the current user data if the request is successful.
    */
-  getCurrentUser(): Observable<{user: User}> {
-    return this.http.get<{user: User}>('/users/getUser').pipe(
+  getCurrentUser(): Observable<User> {
+    return this.http.get<User>('/users/getUser').pipe(
       tap({
-        next: ({user}) => this.currentUserSubject.next(user),
-        error: () => this.purgeAuth(),
+        next: (user) => {
+          this.currentUserSubject.next(user);
+        },
+        error: () => {
+          this.purgeAuth()
+        },
       }),
     );
   }
