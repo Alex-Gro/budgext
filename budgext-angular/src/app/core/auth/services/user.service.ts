@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, distinctUntilChanged, map, Observable, tap } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, map, Observable, shareReplay, tap } from 'rxjs';
 import { JwtService } from './jwt.service';
 import { Router } from '@angular/router';
 import { User } from '../user.model';
@@ -83,6 +83,7 @@ export class UserService {
           this.purgeAuth()
         },
       }),
+      shareReplay(1), // Shares the last response with all subscriptions
     );
   }
 
