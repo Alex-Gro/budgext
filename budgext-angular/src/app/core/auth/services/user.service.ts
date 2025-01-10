@@ -4,6 +4,7 @@ import { BehaviorSubject, distinctUntilChanged, map, Observable, shareReplay, ta
 import { JwtService } from './jwt.service';
 import { Router } from '@angular/router';
 import { User } from '../user.model';
+import { TransactionService } from '../../../features/transactions/services/transaction.service';
 
 /**
  * Provides the interface of the response after a token gets requested
@@ -12,6 +13,8 @@ export interface UserAuthResponse {
   access_token: string;
   user: User;
 }
+
+// TODO Implement ngUnsubscribe
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +31,7 @@ export class UserService {
 
   constructor(private http: HttpClient,
               private jwtService: JwtService,
+              private transactionService: TransactionService,
               private router: Router) {}
 
   /**
@@ -41,6 +45,7 @@ export class UserService {
     return this.http.post<UserAuthResponse>('/auth/signup', {email, password})
       .pipe(tap((res: UserAuthResponse) => {
         this.setAuth(res);
+        this.transactionService.loadTransactions();
       }));
   }
 
@@ -55,6 +60,7 @@ export class UserService {
     return this.http.post<UserAuthResponse>('/auth/login', {email, password})
       .pipe(tap((res: UserAuthResponse) => {
         this.setAuth(res);
+        this.transactionService.loadTransactions();
     }));
   }
 
@@ -63,6 +69,7 @@ export class UserService {
    */
   logout(): void {
     this.purgeAuth();
+    this.transactionService.purgeTransactions();
     void this.router.navigate(['/']);
   }
 
@@ -78,9 +85,11 @@ export class UserService {
       tap({
         next: (user) => {
           this.currentUserSubject.next(user);
+          this.transactionService.loadTransactions();
         },
         error: () => {
           this.purgeAuth()
+          this.transactionService.purgeTransactions();
         },
       }),
       shareReplay(1), // Shares the last response with all subscriptions

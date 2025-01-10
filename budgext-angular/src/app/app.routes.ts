@@ -22,6 +22,13 @@ export const routes: Routes = [
   {
     path: 'transactions',
     loadComponent: () => import('./features/transactions/transactions.component').then((c) => c.TransactionsComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    children: [
+      {
+        path: ':id',
+        loadChildren: () => import('./features/transactions/single-transaction.component').then((c) => c.SingleTransactionComponent),
+      }
+    ]
+
   },
 ];

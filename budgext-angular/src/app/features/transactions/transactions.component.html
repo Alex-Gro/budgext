@@ -1,3 +1,58 @@
-<p>transactions works! hello</p>
+@if (creatingFormGroup) {
+  <ng-container [formGroup]="creatingFormGroup">
+    <!-- ID -->
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>ID</mat-label>
+      <input matInput type="number" formControlName="id" placeholder="Enter ID">
+    </mat-form-field>
 
-<button class="margin-right-16" mat-flat-button (click)="getTrans()">get transactions</button>
+    <!-- Amount -->
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Amount</mat-label>
+      <input matInput type="number" formControlName="amount" placeholder="Enter amount">
+    </mat-form-field>
+
+    <!-- Type -->
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Type</mat-label>
+      <input matInput type="text" formControlName="type" placeholder="Enter type">
+    </mat-form-field>
+
+    <!-- Title -->
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Title</mat-label>
+      <input matInput type="text" formControlName="title" placeholder="Enter title">
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Description</mat-label>
+      <input matInput type="text" formControlName="description" placeholder="Enter description">
+    </mat-form-field>
+
+    <!-- Date -->
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Select a date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <!-- Updated At -->
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Updated At</mat-label>
+      <input matInput [matDatepicker]="updatedPicker" formControlName="updatedAt" placeholder="Select update date">
+      <mat-datepicker-toggle matSuffix [for]="updatedPicker"></mat-datepicker-toggle>
+      <mat-datepicker #updatedPicker></mat-datepicker>
+    </mat-form-field>
+
+    <!-- User ID -->
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>User ID</mat-label>
+      <input matInput type="number" formControlName="userId" placeholder="Enter user ID">
+    </mat-form-field>
+
+    <button mat-flat-button (click)="createTransaction()">Create Transaction</button>
+  </ng-container>
+}
+
