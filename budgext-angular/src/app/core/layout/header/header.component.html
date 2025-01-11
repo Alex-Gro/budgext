@@ -10,6 +10,10 @@
       <button class="margin-right-16" mat-flat-button routerLink="/dashboard">Dashboard</button>
       <button class="margin-right-16" mat-flat-button routerLink="/transactions">Transactions</button>
       <button class="margin-right-16" mat-flat-button routerLink="/dashboard">Budget</button>
+      <div class="user-with-settings">
+        <p>{{currentUser?.email}}</p>
+        <button class="margin-right-16" mat-icon-button><mat-icon>settings</mat-icon></button>
+      </div>
       <button mat-stroked-button routerLink="/logout" (click)="logout()">Logout</button>
     </ng-container>
     <ng-container *ifAuthenticated="false">

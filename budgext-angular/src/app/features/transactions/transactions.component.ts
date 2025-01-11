@@ -3,13 +3,15 @@ import { TransactionService } from './services/transaction.service';
 import { Transaction, TransactionFormGroup } from './models/transaction.model';
 import { Subject, takeUntil } from 'rxjs';
 import { MatButton } from '@angular/material/button';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../core/auth/services/user.service';
 import { User } from '../../core/auth/user.model';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOption } from '@angular/material/core';
+import { MatCard } from '@angular/material/card';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-transactions',
@@ -23,6 +25,10 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatDatepicker,
     MatDatepickerInput,
     MatNativeDateModule,
+    MatCard,
+    MatSelect,
+    MatOption,
+    MatError,
   ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.scss'
