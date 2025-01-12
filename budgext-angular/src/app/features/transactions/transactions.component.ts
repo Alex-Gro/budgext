@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TransactionService } from './services/transaction.service';
 import { Transaction, TransactionFormGroup } from './models/transaction.model';
 import { Subject, takeUntil } from 'rxjs';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -12,6 +12,17 @@ import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular
 import { MatNativeDateModule, MatOption } from '@angular/material/core';
 import { MatCard } from '@angular/material/card';
 import { MatSelect } from '@angular/material/select';
+import {
+  MatCell, MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow, MatHeaderRowDef,
+  MatRow, MatRowDef,
+  MatTable,
+} from '@angular/material/table';
+import { DatePipe } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-transactions',
@@ -26,19 +37,34 @@ import { MatSelect } from '@angular/material/select';
     MatDatepickerInput,
     MatNativeDateModule,
     MatCard,
+    MatIcon,
     MatSelect,
     MatOption,
     MatError,
+    MatTable,
+    MatHeaderCell,
+    MatCell,
+    MatHeaderRow,
+    MatRow,
+    DatePipe,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatCellDef,
+    MatHeaderRowDef,
+    MatRowDef,
+    MatMiniFabButton,
   ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.scss'
 })
 export class TransactionsComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
-  currentUser: User | null = null;
-  transactions: Transaction[] = [];
 
-  creatingFormGroup: FormGroup<TransactionFormGroup> | null = null;
+  public currentUser: User | null = null;
+  public transactions: Transaction[] = [];
+  public displayedColumns: string[] = ['amount', 'title', 'type', 'description', 'date', 'delete'];
+
+  public creatingFormGroup: FormGroup<TransactionFormGroup> | null = null;
 
   constructor(private transactionService: TransactionService,
               private userService: UserService) {}
@@ -46,6 +72,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.userService.currentUser$.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((user) => this.currentUser = user);
+
     if (this.currentUser) {
       this.creatingFormGroup = new FormGroup<TransactionFormGroup>({
         id: new FormControl<number | null>(null),
@@ -59,17 +86,13 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       });
     }
 
-    console.log(this.currentUser);
-    console.log(this.creatingFormGroup);
-
     this.transactionService.transactions$.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((transactions) => this.transactions = transactions);
-    console.log(this.transactions);
   }
 
   createTransaction() {
     if (this.creatingFormGroup) {
-      this.transactionService.createTransaction(this.creatingFormGroup).subscribe();
+      this.transactionService.createTransaction(this.creatingFormGroup.value as Transaction).subscribe();
     }
   }
 
