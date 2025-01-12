@@ -13,8 +13,7 @@ export class EditTransactionDto {
 
   @IsString()
   @IsNotEmpty()
-  @IsOptional()
-  title?: string;
+  title: string;
 
   @IsString()
   @IsOptional()

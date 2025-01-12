@@ -6,6 +6,7 @@ export class CreateTransactionDto {
   @IsNotEmpty()
   amount: number;
 
+  @IsString()
   @IsNotEmpty()
   type: string; // 'income', 'expense' - evtl enum?
 
@@ -16,7 +17,6 @@ export class CreateTransactionDto {
   @IsString()
   @IsOptional()
   description?: string;
-
 
   @IsNotEmpty()
   @IsDate()

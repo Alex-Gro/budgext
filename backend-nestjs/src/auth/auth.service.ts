@@ -22,7 +22,7 @@ export class AuthService {
         const createdUser = await tx.user.create({
           data: {
             email: dto.email,
-            hash,
+            password: hash,
           },
         });
         await tx.balance.create({
@@ -60,7 +60,7 @@ export class AuthService {
     }
     // compare password
     const pwMatches = await argon.verify(
-      user.hash,
+      user.password,
       dto.password,
     )
     // if password incorrect throw except
@@ -72,7 +72,7 @@ export class AuthService {
   }
 
   async signToken(user: User): Promise<{access_token: string, user: User}> {
-    delete user.hash;
+    delete user.password;
 
     const payload = {
       sub: user.id,

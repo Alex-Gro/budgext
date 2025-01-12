@@ -30,7 +30,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
       if (!user) { return null } // return null throws 401, Unauthorized (user could not be found)
 
-      delete user.hash;
+      delete user.password;
       return user;
     } catch (error) {
       throw new UnauthorizedException('Invalid token or user not found!')

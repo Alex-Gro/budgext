@@ -2,11 +2,11 @@
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
-    "hash" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "firstname" TEXT,
-    "lastname" TEXT,
-    "displayName" TEXT,
+    "firstname" TEXT NOT NULL DEFAULT '',
+    "lastname" TEXT NOT NULL DEFAULT '',
+    "displayName" TEXT NOT NULL DEFAULT '',
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -14,10 +14,10 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "transactions" (
     "id" SERIAL NOT NULL,
-    "amount" DOUBLE PRECISION NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL DEFAULT 0.0,
     "type" TEXT NOT NULL,
-    "title" TEXT,
-    "description" TEXT,
+    "title" TEXT NOT NULL DEFAULT '',
+    "description" TEXT NOT NULL DEFAULT '',
     "date" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -41,9 +41,6 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_displayName_key" ON "users"("displayName");
-
--- CreateIndex
-CREATE UNIQUE INDEX "transactions_userId_key" ON "transactions"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "balance_userId_key" ON "balance"("userId");
