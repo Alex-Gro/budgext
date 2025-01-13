@@ -1,5 +1,14 @@
 @if(transactions && displayedColumns.length > 0) {
 <mat-table [dataSource]="transactions">
+  <ng-container matColumnDef="_edit">
+    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+    <mat-cell *matCellDef="let transaction">
+      <button class="edit-button" mat-mini-fab routerLink="/transactions/{{transaction.id}}">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </mat-cell>
+  </ng-container>
+
   <ng-container matColumnDef="amount">
     <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
     <mat-cell *matCellDef="let transaction">{{transaction.amount}} €</mat-cell>
@@ -25,7 +34,7 @@
     <mat-cell *matCellDef="let transaction">{{transaction.date | date}}</mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="delete">
+  <ng-container matColumnDef="_delete">
     <mat-header-cell *matHeaderCellDef>Remove</mat-header-cell>
     <mat-cell *matCellDef="let transaction">
       <button class="delete-button" mat-mini-fab (click)="deleteTransaction(transaction.id)">
@@ -37,42 +46,4 @@
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 </mat-table>
-}
-
-@if(creatingFormGroup) {
-  <mat-card [formGroup]="creatingFormGroup">
-    <mat-form-field appearance="fill">
-      <mat-label>Amount</mat-label>
-      <input matInput type="number" formControlName="amount" placeholder="Enter amount" required>
-      <mat-error>Erforderlich</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Title</mat-label>
-      <input matInput type="text" formControlName="title" placeholder="Enter title" required>
-      <mat-error>Erforderlich</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Type</mat-label>
-      <mat-select formControlName="type">
-        <mat-option value="income">Income</mat-option>
-        <mat-option value="expense">Expense</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Description</mat-label>
-      <input matInput type="text" formControlName="description" placeholder="Enter description">
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Date</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Select a date" required>
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-      <mat-error>Erforderlich</mat-error>
-    </mat-form-field>
-    <button mat-flat-button (click)="createTransaction()">Create Transaction</button>
-  </mat-card>
 }

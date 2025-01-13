@@ -23,12 +23,16 @@ export const routes: Routes = [
     path: 'transactions',
     loadComponent: () => import('./features/transactions/transactions.component').then((c) => c.TransactionsComponent),
     canActivate: [authGuard],
-    children: [
-      {
-        path: ':id',
-        loadChildren: () => import('./features/transactions/single-transaction.component').then((c) => c.SingleTransactionComponent),
-      }
-    ]
-
+  },
+  // TODO - Give variables to fast check?
+  {
+    path: 'transactions/:id',
+    loadComponent: () => import('./features/transactions/single-transaction.component').then((c) => c.SingleTransactionComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'transactions/new',
+    loadComponent: () => import('./features/transactions/single-transaction.component').then((c) => c.SingleTransactionComponent),
+    canActivate: [authGuard],
   },
 ];

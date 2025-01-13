@@ -1,1 +1,41 @@
-<p>single-transaction works!</p>
+@if(formGroup) {
+  <mat-card [formGroup]="formGroup">
+    <mat-form-field appearance="fill">
+      <mat-label>Amount</mat-label>
+      <input matInput type="number" formControlName="amount" placeholder="Enter amount" required>
+      <mat-error>Erforderlich</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Title</mat-label>
+      <input matInput type="text" formControlName="title" placeholder="Enter title" required>
+      <mat-error>Erforderlich</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="type">
+        <mat-option value="income">Income</mat-option>
+        <mat-option value="expense">Expense</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Description</mat-label>
+      <input matInput type="text" formControlName="description" placeholder="Enter description">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Select a date" required>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error>Erforderlich</mat-error>
+    </mat-form-field>
+    @if (isNewTransaction) {
+    <button mat-flat-button (click)="createTransaction()">Create Transaction</button>
+    } @else {
+    <button mat-flat-button (click)="updateTransaction()">Update Transaction</button>
+    }
+  </mat-card>
+}
