@@ -3,7 +3,7 @@
   <ng-container matColumnDef="_edit">
     <mat-header-cell *matHeaderCellDef></mat-header-cell>
     <mat-cell *matCellDef="let transaction">
-      <button class="edit-button" mat-mini-fab routerLink="/transactions/{{transaction.id}}">
+      <button class="action-button" mat-mini-fab routerLink="/transactions/{{transaction.id}}">
         <mat-icon>edit</mat-icon>
       </button>
     </mat-cell>
@@ -37,7 +37,7 @@
   <ng-container matColumnDef="_delete">
     <mat-header-cell *matHeaderCellDef>Remove</mat-header-cell>
     <mat-cell *matCellDef="let transaction">
-      <button class="delete-button" mat-mini-fab (click)="deleteTransaction(transaction.id)">
+      <button class="action-button" mat-mini-fab (click)="deleteTransaction(transaction.id)">
         <mat-icon>delete</mat-icon>
       </button>
     </mat-cell>

@@ -8,9 +8,8 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { Transaction, TransactionFormGroup } from '../models/transaction.model';
+import { Transaction } from '../models/transaction.model';
 import { HttpClient } from '@angular/common/http';
-import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -64,8 +63,8 @@ export class TransactionService implements OnDestroy {
     );
   }
 
-  updateTransaction(updatedTransaction: Transaction): Observable<Transaction> {
-    return this.http.patch<Transaction>('/transactions', updatedTransaction).pipe(
+  updateTransaction(transactionId: number, updatedTransaction: Transaction): Observable<Transaction> {
+    return this.http.patch<Transaction>(`/transactions/${transactionId}`, updatedTransaction).pipe(
       shareReplay(1),
       tap((updatedTransaction) => {
         if (updatedTransaction && updatedTransaction.id) {

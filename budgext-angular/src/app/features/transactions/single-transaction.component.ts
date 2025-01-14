@@ -79,7 +79,7 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
       amount: new FormControl<number>(transaction?.amount || 0, {validators: [Validators.required], nonNullable: true}),
       type: new FormControl<string>(transaction?.type || 'expense', {validators: [Validators.required], nonNullable: true}),
       title: new FormControl<string>(transaction?.title || '', {validators: [Validators.required], nonNullable: true}),
-      description: new FormControl<string>(transaction?.description || '', {validators: [Validators.required], nonNullable: true}),
+      description: new FormControl<string>(transaction?.description || '', {nonNullable: true}),
       date: new FormControl<Date>(transaction?.date || new Date(), {validators: [Validators.required], nonNullable: true}),
       updatedAt: new FormControl<Date>(transaction?.updatedAt || new Date(), {validators: [Validators.required], nonNullable: true}),
       // TODO Check correct userId | get User and take it from there?
@@ -103,8 +103,8 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
 
   // TODO update does not work, does not find transaction 404
   updateTransaction() {
-    if (this.formGroup) {
-      this.transactionService.updateTransaction(this.formGroup.value as Transaction).subscribe({
+    if (this.formGroup && this.transaction?.id) {
+      this.transactionService.updateTransaction(this.transaction.id, this.formGroup.value as Transaction).subscribe({
         next: () => {
           console.log('Transaction updated');
           this.router.navigate(['/transactions']);

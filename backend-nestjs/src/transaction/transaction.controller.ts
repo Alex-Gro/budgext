@@ -21,21 +21,26 @@ import { JwtGuard } from '../auth/guard';
 export class TransactionController {
   constructor(private transactionService: TransactionService) {}
 
+  @HttpCode(HttpStatus.OK)
   @Get()
   getAllTransactions(@GetUser('id') userId: number) {
     return this.transactionService.getAllTransactions(userId);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Get(':id')
   getTransactionById(@GetUser('id') userId: number, @Param('id', ParseIntPipe) transactionId: number) {
     return this.transactionService.getTransactionById(userId, transactionId);
   }
 
+  @HttpCode(HttpStatus.CREATED)
   @Post()
   createTransaction(@GetUser('id') userId: number, @Body() dto: CreateTransactionDto) {
     return this.transactionService.createTransaction(userId, dto);
   }
 
+  // TODO Maybe empty Patch() and get transactionId from dto?
+  @HttpCode(HttpStatus.OK)
   @Patch(':id')
   editTransaction(@GetUser('id') userId: number, @Param('id', ParseIntPipe) transactionId: number, @Body() dto: EditTransactionDto) {
     return this.transactionService.editTransaction(userId, transactionId, dto);
