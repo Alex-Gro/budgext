@@ -8,9 +8,11 @@ import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular
 import { MatButton } from '@angular/material/button';
 import { TransactionService } from './services/transaction.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { map, Subject, takeUntil } from 'rxjs';
 import { Transaction, TransactionFormGroup } from './models/transaction.model';
 import { MatNativeDateModule } from '@angular/material/core';
+import { UserService } from '../../core/auth/services/user.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-single-transaction',
@@ -33,22 +35,33 @@ import { MatNativeDateModule } from '@angular/material/core';
   styleUrl: './single-transaction.component.scss'
 })
 export class SingleTransactionComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe = new Subject<void>();
+  private _ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  public isNewTransaction = false;
-  private transaction: Transaction | null = null;
+  public isNewTransaction: boolean = false;
+
+  private _transaction: Transaction | null = null;
+  private _userId: number | null = null;
+
   public formGroup: FormGroup<TransactionFormGroup> | null = null;
 
+  public creating: boolean = false;
+
   constructor(private transactionService: TransactionService,
+              private userService: UserService,
               private route: ActivatedRoute,
               private router: Router) {}
 
 
   ngOnInit(): void {
+    // TODO If !userId then redirect to login or dont do the rest of ngOnInit() ?
+    this.userService.currentUser$.pipe(takeUntil(this._ngUnsubscribe), map((user) => user?.id))
+    .subscribe((userId) => this._userId = userId || null);
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id === 'new') {
+      this.creating = true;
       this.isNewTransaction = true;
-      this.transaction = null;
+      this._transaction = null;
       this.formGroup = this.createFormGroup({
         id: null,
         amount: 0,
@@ -57,16 +70,17 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
         description: '',
         date: new Date(),
         updatedAt: new Date(),
-        userId: 1
+        userId: this._userId,
       } as Transaction);
 
     } else if (id && !isNaN(parseInt(id, 10))) {
-      this.transactionService.transactions$.subscribe((transactions) => {
+      this.creating = false;
+      this.transactionService.transactions$.pipe(takeUntil(this._ngUnsubscribe)).subscribe((transactions) => {
         if (transactions) {
-          this.transaction = transactions.find((transaction: Transaction) => transaction.id === parseInt(id, 10)) || null;
-          if (this.transaction) {
+          this._transaction = transactions.find((transaction: Transaction) => transaction.id === parseInt(id, 10)) || null;
+          if (this._transaction) {
             this.isNewTransaction = false;
-            this.formGroup = this.createFormGroup(this.transaction);
+            this.formGroup = this.createFormGroup(this._transaction);
           }
         }
       });
@@ -82,7 +96,6 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
       description: new FormControl<string>(transaction?.description || '', {nonNullable: true}),
       date: new FormControl<Date>(transaction?.date || new Date(), {validators: [Validators.required], nonNullable: true}),
       updatedAt: new FormControl<Date>(transaction?.updatedAt || new Date(), {validators: [Validators.required], nonNullable: true}),
-      // TODO Check correct userId | get User and take it from there?
       userId: new FormControl<number>(transaction?.userId, {validators: [Validators.required], nonNullable: true}),
     });
   }
@@ -101,10 +114,9 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
     }
   }
 
-  // TODO update does not work, does not find transaction 404
   updateTransaction() {
-    if (this.formGroup && this.transaction?.id) {
-      this.transactionService.updateTransaction(this.transaction.id, this.formGroup.value as Transaction).subscribe({
+    if (this.formGroup && this._transaction?.id) {
+      this.transactionService.updateTransaction(this._transaction.id, this.formGroup.value as Transaction).subscribe({
         next: () => {
           console.log('Transaction updated');
           this.router.navigate(['/transactions']);
@@ -117,8 +129,8 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
+    this._ngUnsubscribe.next();
+    this._ngUnsubscribe.complete();
   }
 
 }

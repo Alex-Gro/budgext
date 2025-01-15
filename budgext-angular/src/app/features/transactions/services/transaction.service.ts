@@ -1,8 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import {
   BehaviorSubject,
+  catchError,
   distinctUntilChanged,
   Observable,
+  of,
   shareReplay,
   Subject,
   takeUntil,
@@ -27,10 +29,7 @@ export class TransactionService implements OnDestroy {
   loadTransactions(): void {
     if (!this.loading) {
       this.loading = true;
-      this.getTransactions().pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe({
+      this.getTransactions().subscribe({
         next: (transactions) => {
           this.transactionsSubject.next(transactions);
           this.loading = false;
@@ -46,6 +45,10 @@ export class TransactionService implements OnDestroy {
   getTransactions(): Observable<Transaction[]> {
     return this.http.get<Transaction[]>('/transactions').pipe(
       shareReplay(1), // Shares the last response with all subscriptions
+      catchError((err) => {
+        console.error('Error loading transactions', err);
+        return of([]);
+      }),
     );
   }
 
@@ -75,7 +78,11 @@ export class TransactionService implements OnDestroy {
         } else {
           console.error('Transaction update failed', updatedTransaction);
         }
-      })
+      }),
+      catchError((err) => {
+        console.error('Error loading transactions', err);
+        return of({} as Transaction);
+      }),
     );
   }
 
@@ -85,7 +92,11 @@ export class TransactionService implements OnDestroy {
       tap(() => {
         const updatedTransactions = this.transactionsSubject.value.filter(transaction => transaction.id !== transactionId);
         this.transactionsSubject.next(updatedTransactions);
-      })
+      }),
+      catchError((err) => {
+        console.error('Error loading transactions', err);
+        return of(undefined);
+      }),
     );
   }
 

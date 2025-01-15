@@ -44,9 +44,9 @@ import { RouterLink } from '@angular/router';
   styleUrl: './transactions.component.scss'
 })
 export class TransactionsComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe = new Subject<void>();
+  private _ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  public currentUser: User | null = null;
+  private _currentUser: User | null = null;
   public transactions: Transaction[] = [];
   public displayedColumns: string[] = ['_edit', 'amount', 'title', 'type', 'description', 'date', '_delete'];
 
@@ -54,9 +54,9 @@ export class TransactionsComponent implements OnInit, OnDestroy {
               private userService: UserService) {}
 
   ngOnInit(): void {
-    this.userService.currentUser$.pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((user) => this.currentUser = user);
-    this.transactionService.transactions$.pipe(takeUntil(this.ngUnsubscribe))
+    this.userService.currentUser$.pipe(takeUntil(this._ngUnsubscribe))
+      .subscribe((user) => this._currentUser = user);
+    this.transactionService.transactions$.pipe(takeUntil(this._ngUnsubscribe))
       .subscribe((transactions) => this.transactions = transactions);
   }
 
@@ -72,7 +72,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
+    this._ngUnsubscribe.next();
+    this._ngUnsubscribe.complete();
   }
 }

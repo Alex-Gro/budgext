@@ -21,10 +21,10 @@ export interface UserAuthResponse {
 })
 export class UserService {
   /** Holds the current user (state), initially null */
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  private _currentUserSubject = new BehaviorSubject<User | null>(null);
 
   /** Exposes the currentUser observable, emitting only distinct values */
-  public currentUser$ = this.currentUserSubject.asObservable().pipe(distinctUntilChanged());
+  public currentUser$ = this._currentUserSubject.asObservable().pipe(distinctUntilChanged());
 
   /** Checks if a user is authenticated (based on currentUser) */
   public userAuthenticated = this.currentUser$.pipe(map((user) => !!user));
@@ -84,7 +84,7 @@ export class UserService {
     return this.http.get<User>('/users/getUser').pipe(
       tap({
         next: (user) => {
-          this.currentUserSubject.next(user);
+          this._currentUserSubject.next(user);
           this.transactionService.loadTransactions();
         },
         error: () => {
@@ -102,7 +102,7 @@ export class UserService {
    */
   setAuth(userAuthResponse: UserAuthResponse): void {
     this.jwtService.saveToken(userAuthResponse.access_token);
-    this.currentUserSubject.next(userAuthResponse.user)
+    this._currentUserSubject.next(userAuthResponse.user)
   }
 
   /**
@@ -110,6 +110,6 @@ export class UserService {
    */
   purgeAuth(): void {
     this.jwtService.destroyToken();
-    this.currentUserSubject.next(null);
+    this._currentUserSubject.next(null);
   }
 }

@@ -24,16 +24,14 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe = new Subject<void>();
-  currentUser: User | null = null;
+  private _ngUnsubscribe: Subject<void> = new Subject<void>();
+  public currentUser: User | null = null;
+
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    this.userService.currentUser$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((user) => {
-      if (user) {
-        this.currentUser = user
-      }
-    });
+    this.userService.currentUser$.pipe(takeUntil(this._ngUnsubscribe))
+    .subscribe((user) => this.currentUser = user || null);
   }
 
   logout(): void {
@@ -41,7 +39,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
+    this._ngUnsubscribe.next();
+    this._ngUnsubscribe.complete();
   }
 }

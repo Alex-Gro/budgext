@@ -1,5 +1,11 @@
-@if(formGroup) {
+@if (formGroup) {
   <mat-card [formGroup]="formGroup">
+    
+    @if (creating) {
+    <h2>Transaktion erstellen</h2>
+    } @else {
+    <h2>Transaktion ändern</h2>
+    }
     <mat-form-field appearance="fill">
       <mat-label>Amount</mat-label>
       <input matInput type="number" formControlName="amount" placeholder="Enter amount" required>
