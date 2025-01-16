@@ -1,13 +1,30 @@
-mat-card {
-  padding: 25px;
-  width: 700px;
-  background-color: white;
-}
-
 .action-button {
   width: 4.5vh;
+  margin: 0 5px;
+  transition: background-color 0.3s;
+  background-color: #0B6532;
+}
+
+.action-button:hover {
+  background-color: #E98B3F;
 }
 
 .add-new-button {
-  margin: 20px 0 0 25px;
+  margin: 20px 0 0 30px;
+  background-color: #E98B3F;
+  transition: background-color 0.3s;
+}
+
+.add-new-button:hover {
+  background-color: #e98b3fd7;
+}
+
+.manual-selection {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+mat-form-field {
+  width: 48%;
 }
