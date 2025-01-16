@@ -15,7 +15,7 @@ model User {
 
   firstname   String   @default("")
   lastname    String   @default("")
-  displayName String   @default("") @unique
+  displayName String   @default("")
 
   transactions Transaction[]
   balance Balance?

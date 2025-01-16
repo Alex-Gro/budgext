@@ -45,7 +45,7 @@ export class SignupComponent {
     });
   }
 
-  signin() {
+  signup() {
     if (this.signinForm && this.signinForm.valid) {
       const email = this.signinForm.get('email')?.value;
       const password = this.signinForm.get('password')?.value;
