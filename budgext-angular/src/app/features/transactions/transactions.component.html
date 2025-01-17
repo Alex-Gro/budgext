@@ -28,7 +28,7 @@
     <ng-container matColumnDef="_edit">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let transaction">
-        <button class="action-button" mat-mini-fab routerLink="/transactions/{{transaction.id}}">
+        <button class="action-button" mat-mini-fab routerLink="/user/transactions/{{transaction.id}}">
           <mat-icon>edit</mat-icon>
         </button>
       </mat-cell>
@@ -75,7 +75,7 @@
     <p>No transactions available for this month.</p>
   }
 
-  <button class="add-new-button" mat-mini-fab routerLink="/transactions/new">
+  <button class="add-new-button" mat-mini-fab routerLink="/user/transactions/new">
     <mat-icon>add</mat-icon>
   </button>
 </div>

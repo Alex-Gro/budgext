@@ -52,7 +52,7 @@ export class SignupComponent {
       if (email && password) {
         let observable = this.userService.signup(email, password);
         observable.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-          next: () => void this.router.navigate(['/dashboard/']),
+          next: () => void this.router.navigate(['/user/dashboard/']),
           error: (err: any) => {
             // TODO Handle error in GUI?
             console.log('####');

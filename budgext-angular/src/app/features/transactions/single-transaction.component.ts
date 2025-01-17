@@ -105,7 +105,7 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
       this.transactionService.createTransaction(this.formGroup.value as Transaction).subscribe({
         next: () => {
           console.log('Transaction created');
-          this.router.navigate(['/transactions']);
+          this.router.navigate(['/user/transactions']);
         },
         error: (err) => {
           console.error('Error creating transaction', err);
@@ -119,7 +119,7 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
       this.transactionService.updateTransaction(this._transaction.id, this.formGroup.value as Transaction).subscribe({
         next: () => {
           console.log('Transaction updated');
-          this.router.navigate(['/transactions']);
+          this.router.navigate(['/user/transactions']);
         },
         error: (err) => {
           console.error('Error updating transaction', err);
