@@ -7,14 +7,14 @@ export class JwtService {
   constructor() { }
 
   getToken(): string | null {
-    return sessionStorage.getItem('accessToken');
+    return localStorage.getItem('accessToken');
   }
 
   saveToken(token: string): void {
-    sessionStorage.setItem('accessToken', token);
+    localStorage.setItem('accessToken', token);
   }
 
   destroyToken(): void {
-    sessionStorage.removeItem('accessToken');
+    localStorage.removeItem('accessToken');
   }
 }
