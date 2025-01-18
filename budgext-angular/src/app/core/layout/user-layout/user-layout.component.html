@@ -1,13 +1,19 @@
 <header>
-    <app-header></app-header>
-  </header>
+  <app-header></app-header>
+</header>
+ 
   
-  <div class="user-layout-container">
-    <aside>
-      <app-sidebar></app-sidebar>
-    </aside>
+
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened>
+    <!-- Sidenav content -->
+    <app-sidebar></app-sidebar>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <!-- Main content -->
     <main>
       <router-outlet></router-outlet>
     </main>
-  </div>
-  
+  </mat-sidenav-content>
+</mat-sidenav-container>

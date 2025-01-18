@@ -1,8 +1,5 @@
-<nav>
-    <ul>
-      <li><a routerLink="/user/dashboard">Dashboard</a></li>
-      <li><a routerLink="/user/settings">Settings</a></li>
-      <!-- Weitere Links -->
-    </ul>
-  </nav>
-  
+<mat-nav-list>
+  @for (link of LINK_LIST; track trackByFn) {
+    <a mat-list-item [routerLink]="link.path" routerLinkActive="active">{{ link.label }}</a>
+  }
+</mat-nav-list>
