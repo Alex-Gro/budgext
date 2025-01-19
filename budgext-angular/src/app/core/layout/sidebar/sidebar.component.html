@@ -1,5 +1,5 @@
 <mat-nav-list>
-  @for (link of LINK_LIST; track trackByFn) {
+  @for (link of LINK_LIST; track link.label) {
     <a mat-list-item [routerLink]="link.path" routerLinkActive="active">{{ link.label }}</a>
   }
 </mat-nav-list>

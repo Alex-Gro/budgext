@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatListItem, MatNavList } from '@angular/material/list';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,20 +9,18 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     MatListItem,
     RouterLink,
     RouterLinkActive,
+    RouterModule,
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent {
   LINK_LIST = [
-    {label: 'Dashboard', path: '/user/dashboard', isActive: true},
-    {label: 'Transactions', path: '/user/transactions', isActive: false},
-    {label: 'Budget', path: '/user/budget', isActive: false},
-    {label: 'User settings', path: '/user/settings', isActive: false},
+    {label: 'Dashboard', path: '/user/dashboard'},
+    {label: 'Transactions', path: '/user/transactions'},
+    {label: 'Budget', path: '/user/budget'},
+    {label: 'User settings', path: '/user/settings'},
   ];
   constructor() {}
 
-  trackByFn(index: number, link: any): string {
-    return link.path;
-  }
 }
