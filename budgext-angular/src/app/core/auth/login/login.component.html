@@ -26,5 +26,8 @@
     </mat-form-field>
 
     <button mat-flat-button class="full-width" (click)="login()" [disabled]="loginForm.invalid">Login</button>
+    @if (error) {
+      <p>{{error}}</p>
+    }
   </form>
 </mat-card>

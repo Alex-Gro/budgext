@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { AsyncPipe, NgOptimizedImage } from '@angular/common';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { NgOptimizedImage } from '@angular/common';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatToolbar } from '@angular/material/toolbar';
 import { UserService } from '../../auth/services/user.service';
@@ -26,10 +26,16 @@ import { MatIcon } from '@angular/material/icon';
 export class HeaderComponent implements OnInit, OnDestroy {
   private _ngUnsubscribe: Subject<void> = new Subject<void>();
   public currentUser: User | null = null;
+  public userRoute: boolean = false;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService,
+              private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.route.url.pipe(takeUntil(this._ngUnsubscribe)).subscribe(url => {
+      this.userRoute = url.length > 0 && url[0].path === 'user';
+    });
+
     this.userService.currentUser$.pipe(takeUntil(this._ngUnsubscribe))
     .subscribe((user) => this.currentUser = user || null);
   }

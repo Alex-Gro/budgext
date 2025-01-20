@@ -21,5 +21,8 @@
       }
     </mat-form-field>
     <button mat-flat-button class="full-width" (click)="signup()" [disabled]="signinForm.invalid">Registrieren</button>
+    @if (error) {
+      <p>{{error}}</p>
+    }
   </form>
 </mat-card>

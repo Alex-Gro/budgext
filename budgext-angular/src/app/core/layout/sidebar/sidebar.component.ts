@@ -18,8 +18,8 @@ export class SidebarComponent {
   LINK_LIST = [
     {label: 'Dashboard', path: '/user/dashboard'},
     {label: 'Transactions', path: '/user/transactions'},
-    {label: 'Budget', path: '/user/budget'},
-    {label: 'User settings', path: '/user/settings'},
+    // {label: 'Budget', path: '/user/budget'},
+    // {label: 'User settings', path: '/user/settings'},
   ];
   constructor() {}
 

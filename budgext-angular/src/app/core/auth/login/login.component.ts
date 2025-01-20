@@ -31,6 +31,8 @@ export class LoginComponent {
   public destroyRef = inject(DestroyRef);
   public loginForm: FormGroup<loginFormGroup>;
 
+  public error: string | null = null;
+
   constructor(private userService: UserService,
               private router: Router) {
     this.loginForm = new FormGroup<loginFormGroup>({
@@ -49,6 +51,7 @@ export class LoginComponent {
    * POST request for logging in a user
    */
   login() {
+    this.error = null;
     // TODO Typing to User / Credentials?!
     if (this.loginForm && this.loginForm.valid) {
       const email = this.loginForm.get('email')?.value;
@@ -58,10 +61,7 @@ export class LoginComponent {
         observable.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
           next: () => void this.router.navigate(['/user/dashboard/']),
           error: (err: any) => {
-            // TODO Handle error in GUI?
-            console.log('####');
-            console.log(err);
-            console.log('####');
+            this.error = err.message;
           },
         });
       }

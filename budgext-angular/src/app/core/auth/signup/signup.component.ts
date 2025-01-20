@@ -31,6 +31,8 @@ export class SignupComponent {
   public destroyRef = inject(DestroyRef);
   public signinForm: FormGroup<SigninFormGroup>;
 
+  public error: string | null = null;
+
   constructor(private userService: UserService,
               private router: Router) {
     this.signinForm = new FormGroup<SigninFormGroup>({
@@ -46,6 +48,7 @@ export class SignupComponent {
   }
 
   signup() {
+    this.error = null;
     if (this.signinForm && this.signinForm.valid) {
       const email = this.signinForm.get('email')?.value;
       const password = this.signinForm.get('password')?.value;
@@ -54,10 +57,7 @@ export class SignupComponent {
         observable.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
           next: () => void this.router.navigate(['/user/dashboard/']),
           error: (err: any) => {
-            // TODO Handle error in GUI?
-            console.log('####');
-            console.log(err);
-            console.log('####');
+            this.error = err.message;
           },
         });
       }
