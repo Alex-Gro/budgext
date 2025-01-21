@@ -1,19 +1,21 @@
 <header>
   <app-header></app-header>
 </header>
- 
-  
 
-<mat-sidenav-container>
-  <mat-sidenav mode="side" opened>
+
+
+<mat-sidenav-container autosize>
+  <mat-sidenav mode="side" opened="{{isExpanded}}">
     <!-- Sidenav content -->
-    <app-sidebar></app-sidebar>
+    <app-sidebar (toggleMenu)="toggleMenu()" [isExpanded]="isExpanded"></app-sidebar>
   </mat-sidenav>
 
-  <mat-sidenav-content>
+  <mat-sidenav-content [style.margin-left.px]="!isExpanded ? 60 : 250">
     <!-- Main content -->
-    <main>
-      <router-outlet></router-outlet>
-    </main>
+    <div class="content-container">
+      <main>
+        <router-outlet></router-outlet>
+      </main>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

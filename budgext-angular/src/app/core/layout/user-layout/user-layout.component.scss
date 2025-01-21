@@ -3,15 +3,14 @@ header {
   width: 100%;
 }
 
-mat-sidenav-container {
-  height: calc(100vh - 64px); /* Full height minus header height */
-}
-
-mat-sidenav {
-  width: 240px;
-}
-
 mat-sidenav-content {
   background-color: white;
   padding: 16px;
+}
+
+// TODO Remove ??
+.content-container {
+  min-height: calc(100vh - 64px); /* Full height minus header height */
+  box-sizing: border-box;
+  padding: 25px;
 }

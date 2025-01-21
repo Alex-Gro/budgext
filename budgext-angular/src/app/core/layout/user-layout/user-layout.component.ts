@@ -17,4 +17,12 @@ import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/mat
   templateUrl: './user-layout.component.html',
   styleUrl: './user-layout.component.scss'
 })
-export class UserLayoutComponent {}
+export class UserLayoutComponent {
+  public isExpanded: boolean = true;
+
+  constructor() {}
+
+  public toggleMenu(): void {
+    this.isExpanded = !this.isExpanded;
+  }
+}

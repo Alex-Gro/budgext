@@ -1,5 +1,15 @@
-<mat-nav-list>
-  @for (link of LINK_LIST; track link.label) {
-    <a mat-list-item [routerLink]="link.path" routerLinkActive="active">{{ link.label }}</a>
-  }
-</mat-nav-list>
+<section [class.sidenav]="isExpanded">
+  <button class="toggle" mat-icon-button (click)="toggleMenu.emit(null)">
+    <mat-icon>{{ isExpanded ? "keyboard_backspace" : "menu"}}</mat-icon>
+  </button>
+  <mat-nav-list class="nav">
+    @for (link of LINK_LIST; track link.label) {
+      <a mat-list-item [routerLink]="link.path" routerLinkActive="active-link">
+        <mat-icon matListItemIcon [matTooltip]="!isExpanded ? link.label : null" matTooltipPosition="right">{{ link.matIcon }}</mat-icon>
+        @if (isExpanded) {
+          {{ link.label }}
+        }
+      </a>
+    }
+  </mat-nav-list>
+</section>
