@@ -8,10 +8,8 @@ import { UserService } from '../../core/auth/services/user.service';
 import { User } from '../../core/auth/user.model';
 import { MatNativeDateModule, MatOption } from '@angular/material/core';
 import {
-  MatCell, MatCellDef,
-  MatColumnDef,
-  MatHeaderCell,
-  MatHeaderCellDef,
+  MatCell, MatCellDef, MatColumnDef,
+  MatHeaderCell, MatHeaderCellDef,
   MatHeaderRow, MatHeaderRowDef,
   MatRow, MatRowDef,
   MatTable,
@@ -35,16 +33,16 @@ import { MatSelect } from '@angular/material/select';
     MatRow,
     DatePipe,
     MatColumnDef,
-    MatHeaderCellDef,
-    MatCellDef,
-    MatHeaderRowDef,
-    MatRowDef,
     MatFormField,
     MatLabel,
     MatSelect,
     MatOption,
     MatMiniFabButton,
     RouterLink,
+    MatHeaderRowDef,
+    MatRowDef,
+    MatHeaderCellDef,
+    MatCellDef,
   ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.scss'
@@ -54,7 +52,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   private _currentUser: User | null = null;
   public transactions: Transaction[] = [];
-  public displayedColumns: string[] = ['_edit', 'amount', 'title', 'type', 'description', 'date', '_delete'];
+  public displayedColumns: string[] = ['_edit', 'amount', 'title', 'description', 'date', '_delete'];
   public filteredTransactions: Transaction[] = [];
   public currentMonth: Date = new Date();
   public selectedMonth: number = this.currentMonth.getMonth();
