@@ -37,6 +37,7 @@ body {
   color: var(--mat-sys-on-surface);
 }
 
+/* Take control from default mat-sidenav functionality to make it possible for individual manipulation */
 mat-sidenav[style] {
   visibility: visible !important;
 }
