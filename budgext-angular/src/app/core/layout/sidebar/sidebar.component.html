@@ -1,7 +1,18 @@
-<button class="toggle" mat-icon-button (click)="toggleMenu.emit(null)">
-  <mat-icon>{{ isExpanded ? "keyboard_backspace" : "menu"}}</mat-icon>
+<button [class]="isExpanded ? 'expanded-button' : 'collapsed-button'" mat-icon-button (click)="toggleMenu.emit(null)">
+   @if (isExpanded) {
+     <span class="button-text">Collapse sidebar</span>
+   }
+  <mat-icon>{{ isExpanded ? 'keyboard_backspace' : 'menu'}}</mat-icon>
 </button>
 <mat-nav-list class="nav">
+
+  <a mat-list-item (click)="toggleMenu.emit(null)">
+    <mat-icon matListItemIcon>{{ isExpanded ? 'keyboard_backspace' : 'menu' }}</mat-icon>
+    @if (isExpanded) {
+      Collapse sidebar
+    }
+  </a>
+
   @for (link of LINK_LIST; track link.label) {
     <a mat-list-item [routerLink]="link.path" routerLinkActive="active-link">
       <mat-icon matListItemIcon [matTooltip]="!isExpanded ? link.label : null" matTooltipPosition="right">{{ link.matIcon }}</mat-icon>
