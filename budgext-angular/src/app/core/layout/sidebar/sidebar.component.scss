@@ -22,22 +22,33 @@
 }
 
 .nav {
+  .sidebar-action {
+    &:hover {
+      background-color: var(--main-neutral);
+    }
+  }
   .active-link {
     background-color: var(--main-primary);
   }
-  .hover {
-    transition-duration: 400ms;
-    transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
-    transition-property: transform, border, background-color;
+  a {
+    &:hover {
+      cursor: pointer;
+      background-color: var(--main-secondary);
+      transition-duration: 400ms;
+      transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+      transition-property: transform, border, background-color;
+    }
+    &.active-link:hover {
+      background-color: var(--main-primary);
+    }
   }
 }
 
-a {
-  &:hover {
-    cursor: pointer;
-    background-color: var(--main-secondary);
-  }
+mat-divider {
+  margin: 4px 0 16px 0;
 }
+
+
 mat-icon {
   color: #000000 !important;
 }
