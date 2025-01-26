@@ -12,9 +12,23 @@
       }
       <div class="user-with-settings">
         <p>{{currentUser?.email}}</p>
-        <button class="margin-right-16" mat-icon-button><mat-icon>settings</mat-icon></button>
+
+        <button mat-icon-button class="mat-menu-button" [matMenuTriggerFor]="menu" aria-label="Settings">
+          <mat-icon>settings</mat-icon>
+        </button>
+
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item routerLink="/user/settings">
+            <mat-icon>manage_accounts</mat-icon>
+            <span>User settings</span>
+          </button>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+
       </div>
-      <button mat-stroked-button (click)="logout()">Logout</button>
     </ng-container>
     <ng-container *ifAuthenticated="false">
       <button class="margin-right-16" mat-stroked-button routerLink="/login">Login</button>

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatToolbar } from '@angular/material/toolbar';
@@ -8,6 +8,7 @@ import { IfAuthenticatedDirective } from '../../auth/if-authenticated.directive'
 import { User } from '../../auth/user.model';
 import { Subject, takeUntil } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-header',
@@ -19,6 +20,9 @@ import { MatIcon } from '@angular/material/icon';
     IfAuthenticatedDirective,
     MatIconButton,
     MatIcon,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'

@@ -1,26 +1,3 @@
-.expanded-button {
-  display: flex;
-  margin-left: auto;
-  align-items: center;
-  gap: 4px;
-  width: auto;
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-.collapsed-button {
-
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-.button-text {
-  font-size: 1rem;
-  font-weight: 400;
-}
-
 .nav {
   .sidebar-action {
     &:hover {
@@ -47,7 +24,6 @@
 mat-divider {
   margin: 4px 0 16px 0;
 }
-
 
 mat-icon {
   color: #000000 !important;

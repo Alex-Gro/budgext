@@ -2,6 +2,13 @@
   width: 4.5vh;
   margin: 0 5px;
   transition: background-color 0.3s;
+}
+
+.edit-button {
+  background-color: var(--main-primary);
+}
+
+.delete-button {
   background-color: var(--main-error);
 }
 
@@ -11,12 +18,12 @@
 
 .add-new-button {
   margin: 20px 0 0 30px;
-  background-color: #E98B3F;
+  background-color: var(--main-tertiary);
   transition: background-color 0.3s;
-}
 
-.add-new-button:hover {
-  background-color: #e98b3fd7;
+  &:hover {
+    background-color: #e98b3fd7;
+  }
 }
 
 .manual-selection {
