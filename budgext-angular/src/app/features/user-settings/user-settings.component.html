@@ -1,1 +1,34 @@
-<p>user-settings works!</p>
+@if (formGroup) {
+  <mat-card [formGroup]="formGroup">
+    <h3>Benutzereinstellungen ändern</h3>
+
+    <mat-form-field appearance="fill">
+      <mat-label>E-Mail</mat-label>
+      <input matInput type="email" formControlName="email" placeholder="Enter email" required>
+      @if (formGroup.get('email')?.hasError('required')) {
+        <mat-error>E-Mail eingeben</mat-error>
+      } @else if (formGroup.get('email')?.hasError('email')) {
+        <mat-error>Bitte gültige E-Mail eingeben</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Firstname</mat-label>
+      <input matInput type="text" formControlName="firstname" placeholder="Enter firstname">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Lastname</mat-label>
+      <input matInput type="text" formControlName="lastname" placeholder="Enter lastname">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Display name</mat-label>
+      <input matInput type="text" formControlName="displayName" placeholder="Enter display name">
+    </mat-form-field>
+
+    <button mat-flat-button (click)="updateUserSettings()">Speichern</button>
+  </mat-card>
+} @else {
+  <p>Getting User failed!</p>
+}

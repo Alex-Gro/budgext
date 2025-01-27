@@ -96,6 +96,10 @@ export class UserService {
     );
   }
 
+  updateUser(userId: number, updatedUser: User): Observable<User> {
+    return new Observable<User>();
+  }
+
   /**
    * Saves the jwt token and the current user
    * @param userAuthResponse Contains the jwt token and user

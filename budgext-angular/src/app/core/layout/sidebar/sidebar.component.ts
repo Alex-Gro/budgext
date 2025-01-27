@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatListItem, MatListItemIcon, MatNavList } from '@angular/material/list';
 import { RouterLink, RouterLinkActive, RouterModule } from '@angular/router';
-import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
@@ -14,7 +13,6 @@ import { MatDividerModule } from '@angular/material/divider';
     RouterLink,
     RouterLinkActive,
     RouterModule,
-    MatIconButton,
     MatIcon,
     MatListItemIcon,
     MatTooltip,

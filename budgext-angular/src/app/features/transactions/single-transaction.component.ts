@@ -12,7 +12,6 @@ import { map, Subject, takeUntil } from 'rxjs';
 import { Transaction, TransactionFormGroup } from './models/transaction.model';
 import { MatNativeDateModule } from '@angular/material/core';
 import { UserService } from '../../core/auth/services/user.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-single-transaction',
