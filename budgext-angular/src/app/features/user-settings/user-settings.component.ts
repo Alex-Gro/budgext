@@ -62,7 +62,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
   updateUserSettings() {
     if (this._me && this.formGroup && this.formGroup.get('id')?.value) {
-      this.userService.updateUser(this._me.id, this.formGroup.value as User).subscribe({
+      this.userService.updateUser(this.formGroup.value as User).subscribe({
         next: () => {
           console.log('User settings updated!');
         },
