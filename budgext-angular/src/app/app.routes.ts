@@ -10,16 +10,14 @@ export const routes: Routes = [
     component: MainLayoutComponent,
     children: [
       {path: '', component: HomeComponent},
-      {
-        path: 'login',
-        loadComponent: () => import('./core/auth/login/login.component').then((c) => c.LoginComponent)
-      },
+      {path: 'login', loadComponent: () => import('./core/auth/login/login.component').then((c) => c.LoginComponent)},
       {path: 'signup', loadComponent: () => import('./core/auth/signup/signup.component').then((c) => c.SignupComponent)},
     ],
   },
   {
     path: 'user',
     component: UserLayoutComponent,
+    canActivate: [authGuard],
     children: [
       {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
       {
@@ -32,7 +30,6 @@ export const routes: Routes = [
         loadComponent: () => import('./features/transactions/transactions.component').then((c) => c.TransactionsComponent),
         canActivate: [authGuard],
       },
-      // TODO - Give variables to fast check?
       {
         path: 'transactions/:id',
         loadComponent: () => import('./features/transactions/single-transaction.component').then((c) => c.SingleTransactionComponent),
@@ -48,7 +45,8 @@ export const routes: Routes = [
         loadComponent: () => import('./features/user-settings/user-settings.component').then((c) => c.UserSettingsComponent),
         canActivate: [authGuard],
       },
+      {path: '**', redirectTo: 'dashboard'},
     ],
-    canActivate: [authGuard],
   },
+  {path: '**', redirectTo: ''},
 ];
