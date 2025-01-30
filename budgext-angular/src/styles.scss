@@ -9,7 +9,7 @@ html {
       tertiary: my-theme.$tertiary-palette,
       theme-type: light,
     ),
-    typography: Roboto,
+    typography: 'Poppins' sans-serif,
     density: 0,
   ));
 }
@@ -19,6 +19,7 @@ html {
   --main-secondary: #E88B3F;
   --main-tertiary: #F4B400;
   --main-error: #D32F2F;
+  --main-white-neutral: #FFFFFF;
   --main-neutral: #F4F4F4;
   --main-neutral-variant: #E0E0E0;
 }
@@ -29,7 +30,7 @@ html, body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 body {
