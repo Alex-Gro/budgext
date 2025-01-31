@@ -5,7 +5,7 @@
 @use "@angular/material" as mat;
 
 /* Light Theme */
-/*:root, :host {
+:root, :host {
   @include mat.theme-overrides((
     primary: #196c38,
     on-primary: #ffffff,
@@ -63,10 +63,10 @@
     inverse-secondary: #ffb782,
     inverse-tertiary: #fdbc13,
   ));
-}*/
+}
 
 /* Dark Theme */
-/*.dark {
+.dark {
   @include mat.theme-overrides((
     primary: #88d899,
     on-primary: #003918,
@@ -124,4 +124,4 @@
     inverse-secondary: #934b00,
     inverse-tertiary: #7a5900,
   ));
-}*/
+}

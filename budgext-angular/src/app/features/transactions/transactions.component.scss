@@ -4,26 +4,14 @@
   transition: background-color 0.3s;
 }
 
-.edit-button {
-  background-color: var(--main-primary);
-}
-
 .delete-button {
-  background-color: var(--main-error);
-}
-
-.action-button:hover {
-  background-color: var(--main-secondary);
+  background-color: var(--mat-sys-error-container);
 }
 
 .add-new-button {
   margin: 20px 0 0 30px;
-  background-color: var(--main-tertiary);
+  background-color: var(--mat-sys-primary);
   transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #e98b3fd7;
-  }
 }
 
 .manual-selection {
@@ -37,9 +25,9 @@ mat-form-field {
 }
 
 .expense {
-  color: var(--main-error);
+  color: var(--mat-sys-error);
 }
 
 .income {
-  color: var(--main-primary);
+  color: var(--mat-sys-primary);
 }

@@ -28,7 +28,7 @@
     <ng-container matColumnDef="_edit">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let transaction">
-        <button class="action-button edit-button" mat-mini-fab routerLink="/user/transactions/{{transaction.id}}">
+        <button class="action-button" mat-mini-fab routerLink="/user/transactions/{{transaction.id}}">
           <mat-icon>edit</mat-icon>
         </button>
       </mat-cell>
