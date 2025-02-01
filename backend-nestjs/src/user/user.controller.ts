@@ -4,6 +4,7 @@ import { GetUser } from '../auth/decorator';
 import { User } from '@prisma/client';
 import { EditUserDto } from './dto';
 import { UserService } from './user.service';
+import { ChangeUserPasswordDto } from './dto/change-user-password.dto';
 
 // UseGuards on this line means, that everything in UserController is JwtGuarded
 @UseGuards(JwtGuard)
@@ -12,15 +13,19 @@ export class UserController {
   constructor(private userService: UserService) {}
   // users/me
   // UseGuards(JwtGuard) here would JwtGuard just this function
-  // TODO Probably getUserById | getUser with just ID?
   @Get('getUser')
   getUser(@GetUser() user: User) {
     return user;
   }
 
-  @Patch()
+  @Patch('editUser')
   editUser(@GetUser('id') userId: number, @Body() dto: EditUserDto) {
     return this.userService.editUser(userId, dto);
+  }
+
+  @Patch('changePw')
+  changeUserPassword(@GetUser('id') userId: number, @Body() dto: ChangeUserPasswordDto) {
+    return this.userService.changeUserPassword(userId, dto);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)

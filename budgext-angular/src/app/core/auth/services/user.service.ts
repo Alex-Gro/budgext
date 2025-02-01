@@ -97,7 +97,24 @@ export class UserService {
   }
 
   updateUser(updatedUser: User): Observable<User> {
-    return this.http.patch<User>('/users/', updatedUser).pipe(
+    return this.http.patch<User>('/users/editUser/', updatedUser).pipe(
+      shareReplay(1),
+      tap((updatedUser) => {
+        if (updatedUser && updatedUser.id) {
+          this._currentUserSubject.next(updatedUser);
+        } else {
+          console.error('User update failed');
+        }
+      }),
+      catchError((err: any) => {
+        console.error('Error updating user', err);
+        return of({} as User);
+      })
+    );
+  }
+
+  changeUserPassword(password: string): Observable<User> {
+    return this.http.patch('/users/changePw/', password).pipe(
       shareReplay(1),
       tap((updatedUser) => {
         if (updatedUser && updatedUser.id) {

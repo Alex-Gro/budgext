@@ -29,6 +29,11 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
   public formGroup: FormGroup | null = null;
 
+  public passwordControl: FormControl<string> = new FormControl<string>('', {
+    nonNullable: true,
+    validators: [Validators.minLength(3), Validators.required]
+  });
+
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
@@ -69,6 +74,15 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
         error: (err: any) => {
           console.error('Error updating user settings', err);
         }
+      });
+    }
+  }
+
+  changeUserPassword() {
+    if (this.passwordControl.valid && this.passwordControl.value.length > 2) {
+      this.userService.changeUserPassword(this.passwordControl.value).subscribe({
+        next: () => console.log('User password updated!'),
+        error: (err: any) => console.error('Error updating user password', err)
       });
     }
   }
