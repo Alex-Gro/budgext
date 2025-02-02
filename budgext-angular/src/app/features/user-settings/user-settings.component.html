@@ -1,4 +1,4 @@
-@if (formGroup) {
+@if (formGroup && passwordControl) {
   <mat-card [formGroup]="formGroup">
     <h3>Benutzereinstellungen ändern</h3>
 
@@ -28,6 +28,17 @@
     </mat-form-field>
 
     <button mat-flat-button (click)="updateUserSettings()">Speichern</button>
+  </mat-card>
+
+  <mat-card>
+    <mat-form-field appearance="fill">
+      <mat-label>Passwort</mat-label>
+      <input matInput [formControl]="passwordControl" placeholder="Enter new password" required>
+      @if (passwordControl.hasError('required')) {
+        <mat-error>Passwort zum Ändern eingeben</mat-error>
+      }
+    </mat-form-field>
+    <button mat-flat-button (click)="changeUserPassword()">Passwort aktualisieren</button>
   </mat-card>
 } @else {
   <p>Getting User failed!</p>

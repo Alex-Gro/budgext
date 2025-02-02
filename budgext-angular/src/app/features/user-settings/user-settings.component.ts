@@ -78,10 +78,18 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  changeUserPassword() {
+  changeUserPassword(): void {
+    // TODO Create succeed message for frontend feedback?
     if (this.passwordControl.valid && this.passwordControl.value.length > 2) {
       this.userService.changeUserPassword(this.passwordControl.value).subscribe({
-        next: () => console.log('User password updated!'),
+        next: (success: boolean) => {
+          if (success) {
+            console.log('User password updated!');
+            this.passwordControl.reset();
+          } else {
+            console.log('User password update failed!');
+          }
+        },
         error: (err: any) => console.error('Error updating user password', err)
       });
     }

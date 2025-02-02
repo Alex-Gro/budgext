@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { EditUserDto } from './dto';
 import { User } from '@prisma/client';
@@ -22,28 +22,26 @@ export class UserService {
     return user;
   }
 
-  async changeUserPassword(userId: number, dto: ChangeUserPasswordDto) {
-    const pw = await argon.hash(dto.password);
-    const user: User = await this.prismaService.user.findUnique({
-      where: {
-        id: userId,
-      }
-    });
-    if (!user) {
-      throw new ForbiddenException('Access to resource denied!')
+  async changeUserPassword(userId: number, dto: ChangeUserPasswordDto): Promise<boolean> {
+    try {
+      const pw = await argon.hash(dto.password);
+      const user: User = await this.prismaService.user.findUnique({
+        where: {
+          id: userId,
+        }
+      });
+      await this.prismaService.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          password: pw,
+        }
+      });
+      return true;
+    } catch (error) {
+      console.error('Error while trying to change user pw', error);
     }
-
-    const updatedUser: User = await this.prismaService.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        password: pw,
-      }
-    });
-    // TODO return true or http status?
-    delete updatedUser.password;
-    return updatedUser;
   }
 
   async deleteUser(userId: number): Promise<boolean> {

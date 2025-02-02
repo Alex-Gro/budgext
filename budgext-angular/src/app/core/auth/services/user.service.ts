@@ -1,6 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, catchError, distinctUntilChanged, map, Observable, of, shareReplay, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  distinctUntilChanged,
+  map,
+  Observable,
+  of,
+  shareReplay,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { JwtService } from './jwt.service';
 import { Router } from '@angular/router';
 import { User } from '../user.model';
@@ -113,20 +123,19 @@ export class UserService {
     );
   }
 
-  changeUserPassword(password: string): Observable<User> {
-    return this.http.patch('/users/changePw/', password).pipe(
-      shareReplay(1),
-      tap((updatedUser) => {
-        if (updatedUser && updatedUser.id) {
-          this._currentUserSubject.next(updatedUser);
+  changeUserPassword(password: string): Observable<boolean> {
+    return this.http.patch<boolean>('/users/changePw/', {password: password}).pipe(
+      tap((success: boolean) => {
+        if (success) {
+          console.log('PW updated!');
         } else {
-          console.error('User update failed');
+          console.log('Updating PW failed!');
         }
       }),
-      catchError((err: any) => {
-        console.error('Error updating user', err);
-        return of({} as User);
-      })
+      catchError((err) => {
+        console.error('Error updating PW', err);
+        throw err;
+      }),
     );
   }
 

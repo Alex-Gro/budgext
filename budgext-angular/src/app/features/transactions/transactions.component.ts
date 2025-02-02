@@ -99,7 +99,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     this.filterTransactionsByMonth();
   }
 
-  deleteTransaction(transactionId: number) {
+  deleteTransaction(transactionId: number): void {
     this.transactionService.deleteTransaction(transactionId).subscribe({
       next: () => {
         console.log('Transaction deleted');

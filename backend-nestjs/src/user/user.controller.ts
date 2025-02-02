@@ -13,18 +13,21 @@ export class UserController {
   constructor(private userService: UserService) {}
   // users/me
   // UseGuards(JwtGuard) here would JwtGuard just this function
+  @HttpCode(HttpStatus.OK)
   @Get('getUser')
   getUser(@GetUser() user: User) {
     return user;
   }
 
+  @HttpCode(HttpStatus.OK)
   @Patch('editUser')
   editUser(@GetUser('id') userId: number, @Body() dto: EditUserDto) {
     return this.userService.editUser(userId, dto);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Patch('changePw')
-  changeUserPassword(@GetUser('id') userId: number, @Body() dto: ChangeUserPasswordDto) {
+  changeUserPassword(@GetUser('id') userId: number, @Body() dto: ChangeUserPasswordDto): Promise<boolean> {
     return this.userService.changeUserPassword(userId, dto);
   }
 
