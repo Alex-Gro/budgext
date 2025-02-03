@@ -1,7 +1,19 @@
+.brand-color {
+  color: var(--mat-sys-primary);
+}
+
+.brand-with-sidebar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 10vh;
+  height: 10dvh;
+}
+
 .nav {
-  .sidebar-action {
+/*  .sidebar-action {
     user-select: none;
-  }
+  }*/
   .active-link {
     background-color: var(--mat-sys-primary);
   }
@@ -16,5 +28,6 @@
 }
 
 mat-divider {
+  border-top-color: var(--mat-sys-surface-variant);
   margin: 4px 0 16px 0;
 }

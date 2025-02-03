@@ -1,9 +1,11 @@
+<!--
 <header>
   <app-header></app-header>
 </header>
+-->
 
 <mat-sidenav-container autosize>
-  <mat-sidenav mode="side" [opened]="isExpanded" [class]="isExpanded ? 'expanded' : 'collapsed'">
+  <mat-sidenav mode="side"  class="sidebar" [opened]="isExpanded" [class]="isExpanded ? 'expanded' : 'collapsed'">
     <!-- Sidenav content -->
     <app-sidebar (toggleMenu)="toggleMenu()" [isExpanded]="isExpanded"></app-sidebar>
   </mat-sidenav>

@@ -1,10 +1,14 @@
-header {
-  height: 64px;
-  width: 100%;
+.sidebar {
+  padding: 25px 0 0 15px;
+  border-right: 1px solid var(--mat-sys-surface-variant);
+  border-radius: 0;
+  box-sizing: border-box;
 }
 
 .content-container {
-  min-height: calc(100vh - 64px); /* Full height minus header height */
+  /* Ensure to be compatible and use dvh for mobile devices */
+  min-height: 100vh;
+  min-height: 100dvh;
   box-sizing: border-box;
   padding: 25px;
 }
