@@ -1,16 +1,10 @@
-<!--
-<header>
-  <app-header></app-header>
-</header>
--->
-
 <mat-sidenav-container autosize>
-  <mat-sidenav mode="side"  class="sidebar" [opened]="isExpanded" [class]="isExpanded ? 'expanded' : 'collapsed'">
+  <mat-sidenav mode="side"  class="sidebar" [opened]="isExpanded" [class]="isExpanded ? 'sidenav-expanded' : 'sidenav-collapsed'">
     <!-- Sidenav content -->
     <app-sidebar (toggleMenu)="toggleMenu()" [isExpanded]="isExpanded"></app-sidebar>
   </mat-sidenav>
 
-  <mat-sidenav-content [style.margin-left.px]="!isExpanded ? 60 : 250">
+  <mat-sidenav-content [class]="isExpanded ? 'sidenav-content-expanded' : 'sidenav-content-collapsed'">
     <!-- Main content -->
     <div class="content-container">
       <main>

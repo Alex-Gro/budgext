@@ -13,10 +13,18 @@
   padding: 25px;
 }
 
-.expanded {
+.sidenav-expanded {
   width: 250px;
 }
 
-.collapsed {
-  width: 60px;
+.sidenav-collapsed {
+  width: 69px;
+}
+
+.sidenav-content-expanded {
+  margin-left: 250px;
+}
+
+.sidenav-content-collapsed {
+  margin-left: 69px;
 }

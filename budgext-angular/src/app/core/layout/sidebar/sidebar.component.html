@@ -1,4 +1,4 @@
-<div class="brand-with-sidebar-toggle">
+<div class="brand-with-sidebar-toggle" [class.collapsed-sidebar-toggle]="!isExpanded">
   @if (isExpanded) {
     <h2><span class="brand-color">Budg</span>ext</h2>
   }

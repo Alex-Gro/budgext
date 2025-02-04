@@ -8,21 +8,28 @@
   justify-content: space-around;
   height: 10vh;
   height: 10dvh;
+
+  &.collapsed-sidebar-toggle {
+    margin-right: 10px;
+  }
 }
 
 .nav {
-/*  .sidebar-action {
-    user-select: none;
-  }*/
+  margin-right: 10px;
   .active-link {
-    background-color: var(--mat-sys-primary);
+    background-color: var(--mat-sys-primary-container);
   }
   a {
+    border-radius: 8px;
+    height: 40px;
     &:hover {
       cursor: pointer;
       transition-duration: 400ms;
       transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
       transition-property: transform, border, background-color;
+    }
+    mat-icon {
+      margin: 0 10px 0 10px;
     }
   }
 }
