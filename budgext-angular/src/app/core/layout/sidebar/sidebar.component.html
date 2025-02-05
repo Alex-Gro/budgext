@@ -1,6 +1,6 @@
 <div class="brand-with-sidebar-toggle" [class.collapsed-sidebar-toggle]="!isExpanded">
   @if (isExpanded) {
-    <h2><span class="brand-color">Budg</span>ext</h2>
+    <h2><a class="brand-link" routerLink="/"><span class="brand-color">Budg</span>ext</a></h2>
   }
   <button mat-icon-button (click)="toggleMenu.emit(null)">
     <mat-icon>{{ isExpanded ? 'keyboard_backspace' : 'menu' }}</mat-icon>
@@ -16,3 +16,22 @@
     </a>
   }
 </mat-nav-list>
+
+<mat-divider></mat-divider>
+
+<div class="user-settings" [matMenuTriggerFor]="menu">
+  <mat-icon class="account-circle">account_circle</mat-icon>
+  <p>{{currentUser?.email}}</p>
+  <mat-icon class="chevron-icon">chevron_right</mat-icon>
+
+  <mat-menu #menu="matMenu" xPosition="after">
+    <button mat-menu-item routerLink="/user/settings">
+      <mat-icon>manage_accounts</mat-icon>
+      <span>User settings</span>
+    </button>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Logout</span>
+    </button>
+  </mat-menu>
+</div>
