@@ -45,7 +45,7 @@ mat-divider {
   margin: 4px 10px 16px 0;
 }
 
-.user-settings {
+.user-settings-expanded {
   user-select: none;
   cursor: pointer;
   display: flex;
@@ -67,6 +67,20 @@ mat-divider {
 
 }
 
-.user-settings[aria-expanded="true"] .chevron-icon {
+.user-settings-expanded[aria-expanded="true"] .chevron-icon {
   transform: rotate(90deg);
+}
+
+.user-settings-collapsed {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  cursor: pointer;
+  border-radius: 8px;
+  height: 40px;
+  margin-right: 10px;
+  &:hover {
+    background-color: var(--mat-sys-surface-variant);
+  }
 }

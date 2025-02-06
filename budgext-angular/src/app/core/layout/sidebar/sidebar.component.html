@@ -19,19 +19,25 @@
 
 <mat-divider></mat-divider>
 
-<div class="user-settings" [matMenuTriggerFor]="menu">
-  <mat-icon class="account-circle">account_circle</mat-icon>
-  <p>{{currentUser?.email}}</p>
-  <mat-icon class="chevron-icon">chevron_right</mat-icon>
+@if (isExpanded) {
+  <div class="user-settings-expanded" [matMenuTriggerFor]="menu">
+    <mat-icon class="account-circle">account_circle</mat-icon>
+    <p>{{currentUser?.email}}</p>
+    <mat-icon class="chevron-icon">chevron_right</mat-icon>
+  </div>
+} @else {
+  <div class="user-settings-collapsed" [matMenuTriggerFor]="menu">
+    <mat-icon>account_circle</mat-icon>
+  </div>
+}
 
-  <mat-menu #menu="matMenu" xPosition="after">
-    <button mat-menu-item routerLink="/user/settings">
-      <mat-icon>manage_accounts</mat-icon>
-      <span>User settings</span>
-    </button>
-    <button mat-menu-item (click)="logout()">
-      <mat-icon>logout</mat-icon>
-      <span>Logout</span>
-    </button>
-  </mat-menu>
-</div>
+<mat-menu #menu="matMenu" xPosition="after">
+  <button mat-menu-item routerLink="/user/settings">
+    <mat-icon>manage_accounts</mat-icon>
+    <span>User settings</span>
+  </button>
+  <button mat-menu-item (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    <span>Logout</span>
+  </button>
+</mat-menu>
