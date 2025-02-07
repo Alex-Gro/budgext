@@ -4,7 +4,7 @@ import { ActivatedRoute, RouterLink, RouterLinkActive, RouterModule } from '@ang
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIconButton } from '@angular/material/button';
 import { UserService } from '../../auth/services/user.service';
 import { Subject, takeUntil } from 'rxjs';
 import { User } from '../../auth/user.model';
@@ -26,7 +26,6 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
     MatMenuTrigger,
     MatMenu,
     MatMenuItem,
-    MatButton,
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'

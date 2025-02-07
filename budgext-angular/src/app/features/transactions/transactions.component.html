@@ -1,4 +1,48 @@
 <h1>Transaktionen</h1>
+
+<div class="transactions-container">
+  <mat-card *ngFor="let group of groupedTransactions" class="day-group">
+    <mat-card-header>
+      <mat-card-title>{{ formatDate(group.date) }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item *ngFor="let transaction of group.transactions" class="transaction-item">
+          <div class="transaction-content">
+            <!-- Edit button -->
+            <button mat-mini-fab color="primary" [routerLink]="['/edit-transaction', transaction.id]">
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <!-- Transaction details -->
+            <div class="transaction-details">
+              <span class="title">{{ transaction.title }}</span>
+              <span class="description">{{ transaction.description }}</span>
+            </div>
+
+            <!-- Amount and date -->
+            <div class="transaction-meta">
+              <span class="amount" [class.negative]="transaction.amount < 0">
+                {{ transaction.amount }}
+              </span>
+              <span class="time">
+                {{ transaction.date | date:'shortTime' }}
+              </span>
+            </div>
+
+            <!-- Delete button -->
+            <button mat-mini-fab color="warn" (click)="deleteTransaction(transaction.id!)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+
 <div class="transactions-container">
   <div class="manual-selection">
     <mat-form-field appearance="fill">
