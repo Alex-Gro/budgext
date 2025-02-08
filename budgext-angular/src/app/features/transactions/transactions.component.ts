@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TransactionService } from './services/transaction.service';
 import { Transaction} from './models/transaction.model';
 import { Subject, takeUntil } from 'rxjs';
@@ -14,7 +14,7 @@ import {
   MatRow, MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import { DatePipe, NgForOf } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
@@ -56,7 +56,6 @@ export interface TransactionDateGroup {
     MatCardTitle,
     MatList,
     MatListItem,
-    NgForOf,
   ],
   providers: [
     DatePipe,
@@ -96,6 +95,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         this.transactions = transactions;
         this.filterTransactionsByDate();
     });
+    console.log(this.groupedTransactions);
   }
 
   /**
