@@ -3,7 +3,7 @@ import { TransactionService } from './services/transaction.service';
 import { Transaction} from './models/transaction.model';
 import { Subject, takeUntil } from 'rxjs';
 import { MatMiniFabButton } from '@angular/material/button';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../core/auth/services/user.service';
 import { User } from '../../core/auth/user.model';
 import { MatNativeDateModule, MatOption } from '@angular/material/core';
@@ -21,6 +21,7 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { MatList, MatListItem } from '@angular/material/list';
+import { MatInput } from '@angular/material/input';
 
 export interface TransactionDateGroup {
   date: Date;
@@ -56,9 +57,8 @@ export interface TransactionDateGroup {
     MatCardTitle,
     MatList,
     MatListItem,
-  ],
-  providers: [
-    DatePipe,
+    MatInput,
+    FormsModule,
   ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.scss'
@@ -82,9 +82,10 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
+  public searchTerm: string = '';
+
   constructor(private transactionService: TransactionService,
-              private userService: UserService,
-              private datePipe: DatePipe) {}
+              private userService: UserService) {}
 
   ngOnInit(): void {
     this.userService.currentUser$.pipe(takeUntil(this._ngUnsubscribe))
@@ -95,7 +96,6 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         this.transactions = transactions;
         this.filterTransactionsByDate();
     });
-    console.log(this.groupedTransactions);
   }
 
   /**
@@ -141,8 +141,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       .sort((a, b) => b.date.getTime() - a.date.getTime());
   }
 
-  formatDate(date: Date): string {
-    return this.datePipe.transform(date, 'longDate') || '';
+  applySearch(): void {
+    console.log(this.searchTerm);
   }
 
   /**
