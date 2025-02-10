@@ -1,31 +1,27 @@
 <h1>Transaktionen</h1>
 
 <div class="search-container">
-  <mat-form-field appearance="outline" class="full-width-search">
+  <mat-form-field appearance="outline" class="search-bar-width">
     <mat-label>Suche nach Transaktionen</mat-label>
-    <input
-      matInput
-      placeholder="Titel, Beschreibung oder Betrag"
-      [(ngModel)]="searchTerm"
-      (ngModelChange)="applySearch()"
-    >
     <mat-icon matPrefix>search</mat-icon>
+    <input matInput placeholder="Titel, Beschreibung oder Betrag" [(ngModel)]="searchTerm" (ngModelChange)="applySearch()">
   </mat-form-field>
+  <!-- TODO Month/Year filter/selection insert here! -->
 </div>
 
-@if (filteredTransactions.length > 0 && groupedTransactions.length > 0) {
+@if (filteredTransactions.length > 0 && filteredByDateTransactions.length > 0) {
   <div class="transactions-container">
-    @for (group of groupedTransactions; track group.date) {
+    @for (groupedByDateTransactions of filteredByDateTransactions; track groupedByDateTransactions.date) {
       <mat-card class="date-group">
         <mat-card-header>
           <mat-card-title class="date-title">
-            {{ group.date | date:'dd.MM.yyyy' }}
+            {{ groupedByDateTransactions.date | date:'dd.MM.yyyy' }}
           </mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
           <mat-list>
-            @for (transaction of group.transactions; track transaction.id) {
+            @for (transaction of groupedByDateTransactions.transactions; track transaction.id) {
               <mat-list-item class="transaction-item" routerLink="/user/transactions/{{transaction.id}}">
                 <div class="transaction-content">
                   <div class="text-content">

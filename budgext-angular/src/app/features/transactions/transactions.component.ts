@@ -3,7 +3,7 @@ import { TransactionService } from './services/transaction.service';
 import { Transaction} from './models/transaction.model';
 import { Subject, takeUntil } from 'rxjs';
 import { MatMiniFabButton } from '@angular/material/button';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { UserService } from '../../core/auth/services/user.service';
 import { User } from '../../core/auth/user.model';
 import { MatNativeDateModule, MatOption } from '@angular/material/core';
@@ -15,15 +15,15 @@ import {
   MatTable,
 } from '@angular/material/table';
 import { DatePipe } from '@angular/common';
-import { MatIcon } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { MatList, MatListItem } from '@angular/material/list';
 import { MatInput } from '@angular/material/input';
 
-export interface TransactionDateGroup {
+export interface TransactionsByDate {
   date: Date;
   transactions: Transaction[];
 }
@@ -31,9 +31,10 @@ export interface TransactionDateGroup {
 @Component({
   selector: 'app-transactions',
   imports: [
-    ReactiveFormsModule,
+    MatFormFieldModule,
     MatNativeDateModule,
     MatIcon,
+    MatIconModule,
     MatTable,
     MatHeaderCell,
     MatCell,
@@ -67,9 +68,12 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   private _ngUnsubscribe: Subject<void> = new Subject<void>();
 
   private _currentUser: User | null = null;
+  /** All available transactions for this user */
   public transactions: Transaction[] = [];
+  /** All available transactions for this user in defined period of time (month, year) */
   public filteredTransactions: Transaction[] = [];
-  public groupedTransactions: TransactionDateGroup[] = [];
+  /** All available transactions from {@link filteredTransactions} filtered with current {@link searchTerm} */
+  public filteredByDateTransactions: TransactionsByDate[] = [];
 
   public displayedColumns: string[] = ['_edit', 'amount', 'title', 'description', 'date', '_delete'];
 
@@ -82,6 +86,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
+  /** Search term entered by the user */
   public searchTerm: string = '';
 
   constructor(private transactionService: TransactionService,
@@ -109,15 +114,16 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       const transactionDate = new Date(transaction.date);
       return transactionDate.getMonth() === month && transactionDate.getFullYear() === year;
     });
-    this.groupTransactions();
+    this.updateFilteredGroups();
   }
 
   /**
-   * Groups transactions by date using reduce
+   * Groups transactions by date using reduce and filters them with the current {@link searchTerm} (default = '')
+   * @internal
    * @private
    */
-  private groupTransactions(): void {
-    const groups = this.filteredTransactions.reduce((acc, transaction) => {
+  private updateFilteredGroups(): void {
+    const transactionsByDate = this.filteredTransactions.reduce((acc, transaction) => {
       const transactionDate = new Date(transaction.date);
       // Create date key without time components
       const dateKey = new Date(
@@ -134,15 +140,25 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       }
       acc[dateKey].transactions.push(transaction);
       return acc;
-    }, {} as { [key: string]: TransactionDateGroup });
+    }, {} as { [key: string]: TransactionsByDate });
 
-    // Convert to array and sort descending
-    this.groupedTransactions = Object.values(groups)
-      .sort((a, b) => b.date.getTime() - a.date.getTime());
+    const sortedDatesWithTransactions = Object.values(transactionsByDate).sort((a,b) => b.date.getTime() - a.date.getTime());
+    this.filteredByDateTransactions = sortedDatesWithTransactions.map((dateWithTransactions) => ({
+      date: dateWithTransactions.date,
+      transactions: dateWithTransactions.transactions.filter((transaction) =>
+        transaction.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        transaction.description.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        transaction.amount.toString().includes(this.searchTerm.toLowerCase())
+      )
+    })).filter((dateWithTransactions) => dateWithTransactions.transactions.length > 0);
   }
 
+  /**
+   * Calls function to use newly input in search bar to apply search term on transactions
+   * @UI
+   */
   applySearch(): void {
-    console.log(this.searchTerm);
+    this.updateFilteredGroups();
   }
 
   /**
