@@ -7,6 +7,17 @@
     <input matInput placeholder="Titel, Beschreibung oder Betrag" [(ngModel)]="searchTerm" (ngModelChange)="applySearch()">
   </mat-form-field>
   <!-- TODO Month/Year filter/selection insert here! -->
+  <mat-form-field>
+    <mat-label>Month and Year</mat-label>
+    <input matInput [matDatepicker]="dp" [formControl]="date">
+    <mat-hint>MM/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+    <mat-datepicker #dp
+                    startView="multi-year"
+                    (monthSelected)="setMonthAndYear($event, dp)"
+                    panelClass="example-month-picker">
+    </mat-datepicker>
+  </mat-form-field>
 </div>
 
 @if (filteredTransactions.length > 0 && filteredByDateTransactions.length > 0) {

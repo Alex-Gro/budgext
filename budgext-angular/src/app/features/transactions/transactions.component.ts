@@ -3,7 +3,7 @@ import { TransactionService } from './services/transaction.service';
 import { Transaction} from './models/transaction.model';
 import { Subject, takeUntil } from 'rxjs';
 import { MatMiniFabButton } from '@angular/material/button';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../core/auth/services/user.service';
 import { User } from '../../core/auth/user.model';
 import { MatNativeDateModule, MatOption } from '@angular/material/core';
@@ -22,6 +22,7 @@ import { MatSelect } from '@angular/material/select';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { MatList, MatListItem } from '@angular/material/list';
 import { MatInput } from '@angular/material/input';
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
 
 export interface TransactionsByDate {
   date: Date;
@@ -60,6 +61,10 @@ export interface TransactionsByDate {
     MatListItem,
     MatInput,
     FormsModule,
+    MatDatepickerToggle,
+    MatDatepicker,
+    ReactiveFormsModule,
+    MatDatepickerInput,
   ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.scss'
@@ -89,6 +94,9 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   /** Search term entered by the user */
   public searchTerm: string = '';
 
+  // TODO Testing date variable
+  date = new FormControl<Date>(new Date());
+
   constructor(private transactionService: TransactionService,
               private userService: UserService) {}
 
@@ -101,6 +109,12 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         this.transactions = transactions;
         this.filterTransactionsByDate();
     });
+  }
+
+  // TODO Testing
+  setMonthAndYear(event: any, dp: any) {
+    console.log(event);
+    console.log(dp);
   }
 
   /**
