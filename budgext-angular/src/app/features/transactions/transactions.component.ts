@@ -3,7 +3,7 @@ import { TransactionService } from './services/transaction.service';
 import { Transaction} from './models/transaction.model';
 import { Subject, takeUntil } from 'rxjs';
 import { MatMiniFabButton } from '@angular/material/button';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../core/auth/services/user.service';
 import { User } from '../../core/auth/user.model';
 import { MatNativeDateModule, MatOption } from '@angular/material/core';
@@ -23,11 +23,23 @@ import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/m
 import { MatList, MatListItem } from '@angular/material/list';
 import { MatInput } from '@angular/material/input';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
+import { DateTime } from 'luxon';
 
 export interface TransactionsByDate {
   date: Date;
   transactions: Transaction[];
 }
+
+export const PICKER_DATE_FORMATS = {
+  parse: {
+    dateInput: 'MM.yyyy',
+  },
+  display: {
+    dateInput: 'MM.yyyy',
+    monthYearLabel: 'MMM yyyy',
+    dateA11yLabel: 'MMMM yyyy',
+    monthYearA11yLabel: 'MMMM yyyy',  },
+};
 
 @Component({
   selector: 'app-transactions',
@@ -66,6 +78,9 @@ export interface TransactionsByDate {
     ReactiveFormsModule,
     MatDatepickerInput,
   ],
+  providers: [
+    {provide: PICKER_DATE_FORMATS, useValue: PICKER_DATE_FORMATS}
+  ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.scss'
 })
@@ -82,10 +97,11 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   public displayedColumns: string[] = ['_edit', 'amount', 'title', 'description', 'date', '_delete'];
 
-  public currentMonth: Date = new Date();
+  public currentMonth: DateTime = DateTime.local().startOf('month');
 
-  public selectedMonth: number = this.currentMonth.getMonth();
-  public selectedYear: number = this.currentMonth.getFullYear();
+  public selectedMonth: number = this.currentMonth.month - 1; // Luxon months are 1-based
+  public selectedYear: number = this.currentMonth.year;
+
   public monthNames: string[] = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
@@ -93,9 +109,6 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   /** Search term entered by the user */
   public searchTerm: string = '';
-
-  // TODO Testing date variable
-  date = new FormControl<Date>(new Date());
 
   constructor(private transactionService: TransactionService,
               private userService: UserService) {}
@@ -111,10 +124,19 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // TODO Testing
-  setMonthAndYear(event: any, dp: any) {
-    console.log(event);
-    console.log(dp);
+  onMonthSelected(event: DateTime, datepicker: MatDatepicker<DateTime>) {
+    this.currentMonth = event;
+    datepicker.close();
+  }
+
+  onDateChange(event: DateTime | null): void {
+    if (event) {
+      const normalizedDate = event.startOf('month');
+      this.selectedYear = event.year;
+      this.selectedMonth = event.month - 1; // Luxon months are 1-based
+      this.currentMonth = normalizedDate;
+      this.filterTransactionsByDate();
+    }
   }
 
   /**
@@ -179,23 +201,23 @@ export class TransactionsComponent implements OnInit, OnDestroy {
    * Updates transaction filter for chosen month
    * @param monthDigit - Number of the chosen month
    */
-  onMonthChange(monthDigit: number): void {
+/*  onMonthChange(monthDigit: number): void {
     this.selectedMonth = +monthDigit;
     this.currentMonth.setMonth(this.selectedMonth);
     this.currentMonth = new Date(this.currentMonth); // Reset date to avoid overflow
     this.filterTransactionsByDate();
-  }
+  }*/
 
   /**
    * Updates transaction filter for chosen year
    * @param yearDigit - Number of the chosen year
    */
-  onYearChange(yearDigit: number): void {
+/*  onYearChange(yearDigit: number): void {
     this.selectedYear = +yearDigit;
     this.currentMonth.setFullYear(this.selectedYear);
     this.currentMonth = new Date(this.currentMonth); // Reset date to avoid overflow
     this.filterTransactionsByDate();
-  }
+  }*/
 
   /**
    * Call {@link TransactionService} to delete the chosen transaction

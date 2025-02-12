@@ -1,21 +1,23 @@
 <h1>Transaktionen</h1>
 
 <div class="search-container">
+  <!-- Search bar -->
   <mat-form-field appearance="outline" class="search-bar-width">
     <mat-label>Suche nach Transaktionen</mat-label>
     <mat-icon matPrefix>search</mat-icon>
     <input matInput placeholder="Titel, Beschreibung oder Betrag" [(ngModel)]="searchTerm" (ngModelChange)="applySearch()">
   </mat-form-field>
-  <!-- TODO Month/Year filter/selection insert here! -->
-  <mat-form-field>
-    <mat-label>Month and Year</mat-label>
-    <input matInput [matDatepicker]="dp" [formControl]="date">
-    <mat-hint>MM/YYYY</mat-hint>
-    <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
-    <mat-datepicker #dp
+
+  <!-- Datepicker MM yyyy -->
+  <mat-form-field appearance="outline" class="date-picker-field">
+    <mat-label>Monat & Jahr</mat-label>
+    <input matInput [matDatepicker]="monthYearPicker" [value]="currentMonth" (dateChange)="onDateChange($event.value)" readonly>
+
+    <mat-datepicker-toggle matIconSuffix [for]="monthYearPicker"></mat-datepicker-toggle>
+    <mat-datepicker #monthYearPicker
                     startView="multi-year"
-                    (monthSelected)="setMonthAndYear($event, dp)"
-                    panelClass="example-month-picker">
+                    panelClass="month-year-picker"
+                    (monthSelected)="onMonthSelected($event, monthYearPicker)">
     </mat-datepicker>
   </mat-form-field>
 </div>
@@ -63,7 +65,7 @@
   <p>No transactions available for this month.</p>
 }
 
-<div>
+<!--<div>
   <div class="manual-selection">
     <mat-form-field appearance="fill">
       <mat-label>Month</mat-label>
@@ -144,4 +146,4 @@
   <button class="add-new-button" mat-mini-fab routerLink="/user/transactions/new">
     <mat-icon>add</mat-icon>
   </button>
-</div>
+</div>-->
