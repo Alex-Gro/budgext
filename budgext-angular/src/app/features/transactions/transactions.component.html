@@ -28,7 +28,7 @@
       <mat-card class="date-group">
         <mat-card-header>
           <mat-card-title class="date-title">
-            {{ groupedByDateTransactions.date | date:'dd.MM.yyyy' }}
+            {{ groupedByDateTransactions.date.toFormat('dd.MM.yyyy') }}
           </mat-card-title>
         </mat-card-header>
 

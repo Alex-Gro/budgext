@@ -2,23 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TransactionService } from './services/transaction.service';
 import { Transaction} from './models/transaction.model';
 import { Subject, takeUntil } from 'rxjs';
-import { MatMiniFabButton } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../core/auth/services/user.service';
 import { User } from '../../core/auth/user.model';
-import { MatNativeDateModule, MatOption } from '@angular/material/core';
-import {
-  MatCell, MatCellDef, MatColumnDef,
-  MatHeaderCell, MatHeaderCellDef,
-  MatHeaderRow, MatHeaderRowDef,
-  MatRow, MatRowDef,
-  MatTable,
-} from '@angular/material/table';
-import { DatePipe } from '@angular/common';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
-import { MatSelect } from '@angular/material/select';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { MatList, MatListItem } from '@angular/material/list';
 import { MatInput } from '@angular/material/input';
@@ -26,7 +16,7 @@ import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular
 import { DateTime } from 'luxon';
 
 export interface TransactionsByDate {
-  date: Date;
+  date: DateTime;
   transactions: Transaction[];
 }
 
@@ -48,23 +38,9 @@ export const PICKER_DATE_FORMATS = {
     MatNativeDateModule,
     MatIcon,
     MatIconModule,
-    MatTable,
-    MatHeaderCell,
-    MatCell,
-    MatHeaderRow,
-    MatRow,
-    DatePipe,
-    MatColumnDef,
     MatFormField,
     MatLabel,
-    MatSelect,
-    MatOption,
-    MatMiniFabButton,
     RouterLink,
-    MatHeaderRowDef,
-    MatRowDef,
-    MatHeaderCellDef,
-    MatCellDef,
     MatCard,
     MatCardHeader,
     MatCardContent,
@@ -95,17 +71,10 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   /** All available transactions from {@link filteredTransactions} filtered with current {@link searchTerm} */
   public filteredByDateTransactions: TransactionsByDate[] = [];
 
-  public displayedColumns: string[] = ['_edit', 'amount', 'title', 'description', 'date', '_delete'];
-
   public currentMonth: DateTime = DateTime.local().startOf('month');
 
   public selectedMonth: number = this.currentMonth.month - 1; // Luxon months are 1-based
   public selectedYear: number = this.currentMonth.year;
-
-  public monthNames: string[] = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
 
   /** Search term entered by the user */
   public searchTerm: string = '';
@@ -119,6 +88,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
     this.transactionService.transactions$.pipe(takeUntil(this._ngUnsubscribe))
       .subscribe((transactions) => {
+        console.log(transactions);
         this.transactions = transactions;
         this.filterTransactionsByDate();
     });
@@ -130,6 +100,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   }
 
   onDateChange(event: DateTime | null): void {
+    console.log('asd');
     if (event) {
       const normalizedDate = event.startOf('month');
       this.selectedYear = event.year;
@@ -146,9 +117,14 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   private filterTransactionsByDate(): void {
     const month = this.selectedMonth;
     const year = this.selectedYear;
+
     this.filteredTransactions = this.transactions.filter(transaction => {
-      const transactionDate = new Date(transaction.date);
-      return transactionDate.getMonth() === month && transactionDate.getFullYear() === year;
+      const transactionDate = DateTime.fromISO(transaction.date.toISOString());
+      if (!transactionDate.isValid) {
+        console.warn('Invalid date for transaction', transaction);
+        return false;
+      }
+      return transactionDate.month === (month + 1) && transactionDate.year === year;
     });
     this.updateFilteredGroups();
   }
@@ -160,17 +136,12 @@ export class TransactionsComponent implements OnInit, OnDestroy {
    */
   private updateFilteredGroups(): void {
     const transactionsByDate = this.filteredTransactions.reduce((acc, transaction) => {
-      const transactionDate = new Date(transaction.date);
-      // Create date key without time components
-      const dateKey = new Date(
-        transactionDate.getFullYear(),
-        transactionDate.getMonth(),
-        transactionDate.getDate()
-      ).toISOString();
+      const date = DateTime.fromISO(transaction.date.toISOString()).startOf('day');
+      const dateKey = date.toISODate()!;
 
       if (!acc[dateKey]) {
         acc[dateKey] = {
-          date: new Date(dateKey),
+          date: date,
           transactions: []
         };
       }
@@ -178,14 +149,17 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       return acc;
     }, {} as { [key: string]: TransactionsByDate });
 
-    const sortedDatesWithTransactions = Object.values(transactionsByDate).sort((a,b) => b.date.getTime() - a.date.getTime());
-    this.filteredByDateTransactions = sortedDatesWithTransactions.map((dateWithTransactions) => ({
-      date: dateWithTransactions.date,
-      transactions: dateWithTransactions.transactions.filter((transaction) =>
-        transaction.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        transaction.description.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        transaction.amount.toString().includes(this.searchTerm.toLowerCase())
-      )
+    const sortedDatesWithTransactions = Object.values(transactionsByDate)
+      .sort((a,b) => b.date.toMillis() - a.date.toMillis()); // Use luxon's toMillis()
+
+    this.filteredByDateTransactions = sortedDatesWithTransactions
+      .map((dateWithTransactions) => ({
+        date: dateWithTransactions.date,
+        transactions: dateWithTransactions.transactions.filter((transaction) =>
+          transaction.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          transaction.description?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          transaction.amount.toString().includes(this.searchTerm.toLowerCase())
+        )
     })).filter((dateWithTransactions) => dateWithTransactions.transactions.length > 0);
   }
 
@@ -196,28 +170,6 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   applySearch(): void {
     this.updateFilteredGroups();
   }
-
-  /**
-   * Updates transaction filter for chosen month
-   * @param monthDigit - Number of the chosen month
-   */
-/*  onMonthChange(monthDigit: number): void {
-    this.selectedMonth = +monthDigit;
-    this.currentMonth.setMonth(this.selectedMonth);
-    this.currentMonth = new Date(this.currentMonth); // Reset date to avoid overflow
-    this.filterTransactionsByDate();
-  }*/
-
-  /**
-   * Updates transaction filter for chosen year
-   * @param yearDigit - Number of the chosen year
-   */
-/*  onYearChange(yearDigit: number): void {
-    this.selectedYear = +yearDigit;
-    this.currentMonth.setFullYear(this.selectedYear);
-    this.currentMonth = new Date(this.currentMonth); // Reset date to avoid overflow
-    this.filterTransactionsByDate();
-  }*/
 
   /**
    * Call {@link TransactionService} to delete the chosen transaction

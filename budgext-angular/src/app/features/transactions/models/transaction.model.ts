@@ -1,4 +1,5 @@
 import { FormControl } from '@angular/forms';
+import { DateTime } from 'luxon';
 
 export interface Transaction {
   id: number | null,
@@ -6,8 +7,8 @@ export interface Transaction {
   type: string, // income || expense
   title: string,
   description: string,
-  date: Date,
-  updatedAt: Date,
+  date: DateTime,
+  updatedAt: DateTime,
   userId: number,
 }
 
@@ -17,7 +18,7 @@ export interface TransactionFormGroup {
   type: FormControl<string>, // income || expense
   title: FormControl<string>,
   description: FormControl<string>,
-  date: FormControl<Date>,
-  updatedAt: FormControl<Date>,
+  date: FormControl<DateTime>,
+  updatedAt: FormControl<DateTime>,
   userId: FormControl<number>,
 }
