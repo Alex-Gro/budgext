@@ -12,6 +12,7 @@ import { map, Subject, takeUntil } from 'rxjs';
 import { Transaction, TransactionFormGroup } from './models/transaction.model';
 import { MatNativeDateModule } from '@angular/material/core';
 import { UserService } from '../../core/auth/services/user.service';
+import { DateTime } from 'luxon';
 
 @Component({
   selector: 'app-single-transaction',
@@ -67,8 +68,8 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
         type: 'expense',
         title: '',
         description: '',
-        date: new Date(),
-        updatedAt: new Date(),
+        date: DateTime.now(),
+        updatedAt: DateTime.now(),
         userId: this._userId,
       } as Transaction);
 
@@ -93,8 +94,8 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
       type: new FormControl<string>(transaction?.type || 'expense', {validators: [Validators.required], nonNullable: true}),
       title: new FormControl<string>(transaction?.title || '', {validators: [Validators.required], nonNullable: true}),
       description: new FormControl<string>(transaction?.description || '', {nonNullable: true}),
-      date: new FormControl<Date>(transaction?.date || new Date(), {validators: [Validators.required], nonNullable: true}),
-      updatedAt: new FormControl<Date>(transaction?.updatedAt || new Date(), {validators: [Validators.required], nonNullable: true}),
+      date: new FormControl<DateTime>(transaction?.date || new Date(), {validators: [Validators.required], nonNullable: true}),
+      updatedAt: new FormControl<DateTime>(transaction?.updatedAt || new Date(), {validators: [Validators.required], nonNullable: true}),
       userId: new FormControl<number>(transaction?.userId, {validators: [Validators.required], nonNullable: true}),
     });
   }

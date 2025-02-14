@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import {
   BehaviorSubject,
   catchError,
-  distinctUntilChanged,
+  distinctUntilChanged, map,
   Observable,
   of,
   shareReplay,
@@ -12,6 +12,7 @@ import {
 } from 'rxjs';
 import { Transaction } from '../models/transaction.model';
 import { HttpClient } from '@angular/common/http';
+import { DateTime } from 'luxon';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,11 @@ export class TransactionService implements OnDestroy {
 
   getTransactions(): Observable<Transaction[]> {
     return this.http.get<Transaction[]>('/transactions').pipe(
+      map((response) => response.map((item: any) => ({
+        ...item,
+        date: DateTime.fromISO(item.date),
+        updatedAt: DateTime.fromISO(item.updatedAt)
+      }))),
       shareReplay(1), // Shares the last response with all subscriptions
       catchError((err) => {
         console.error('Error loading transactions', err);
@@ -53,6 +59,7 @@ export class TransactionService implements OnDestroy {
   }
 
   createTransaction(newTransaction: Transaction): Observable<Transaction> {
+    // TODO Return dates back to ISOString for database/backend
     return this.http.post<Transaction>('/transactions', newTransaction).pipe(
       shareReplay(1),
       tap((createdTransaction) => {
@@ -67,6 +74,7 @@ export class TransactionService implements OnDestroy {
   }
 
   updateTransaction(transactionId: number, updatedTransaction: Transaction): Observable<Transaction> {
+    // TODO Return dates back to ISOString for database/backend
     return this.http.patch<Transaction>(`/transactions/${transactionId}`, updatedTransaction).pipe(
       shareReplay(1),
       tap((updatedTransaction) => {

@@ -88,19 +88,22 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
     this.transactionService.transactions$.pipe(takeUntil(this._ngUnsubscribe))
       .subscribe((transactions) => {
-        console.log(transactions);
         this.transactions = transactions;
         this.filterTransactionsByDate();
     });
   }
 
-  onMonthSelected(event: DateTime, datepicker: MatDatepicker<DateTime>) {
+  onMonthSelected(event: Date, datepicker: MatDatepicker<DateTime>) {
+    console.log(DateTime.fromJSDate(event));
+/*
+    console.log(event.year);
+    console.log(event.month);
     this.currentMonth = event;
+*/
     datepicker.close();
   }
 
   onDateChange(event: DateTime | null): void {
-    console.log('asd');
     if (event) {
       const normalizedDate = event.startOf('month');
       this.selectedYear = event.year;
@@ -119,12 +122,11 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     const year = this.selectedYear;
 
     this.filteredTransactions = this.transactions.filter(transaction => {
-      const transactionDate = DateTime.fromISO(transaction.date.toISOString());
-      if (!transactionDate.isValid) {
+      if (!transaction?.date?.isValid) {
         console.warn('Invalid date for transaction', transaction);
         return false;
       }
-      return transactionDate.month === (month + 1) && transactionDate.year === year;
+      return transaction.date.month === (month + 1) && transaction.date.year === year;
     });
     this.updateFilteredGroups();
   }
@@ -136,9 +138,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
    */
   private updateFilteredGroups(): void {
     const transactionsByDate = this.filteredTransactions.reduce((acc, transaction) => {
-      const date = DateTime.fromISO(transaction.date.toISOString()).startOf('day');
+      const date = transaction.date.startOf('day');
       const dateKey = date.toISODate()!;
-
       if (!acc[dateKey]) {
         acc[dateKey] = {
           date: date,
