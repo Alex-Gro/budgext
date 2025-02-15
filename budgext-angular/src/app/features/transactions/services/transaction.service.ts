@@ -10,7 +10,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { Transaction } from '../models/transaction.model';
+import { ApiTransaction, Transaction } from '../models/transaction.model';
 import { HttpClient } from '@angular/common/http';
 import { DateTime } from 'luxon';
 
@@ -44,8 +44,8 @@ export class TransactionService implements OnDestroy {
   }
 
   getTransactions(): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>('/transactions').pipe(
-      map((response) => response.map((item: any) => ({
+    return this.http.get<ApiTransaction[]>('/transactions').pipe(
+      map((response) => response.map((item: ApiTransaction) => ({
         ...item,
         date: DateTime.fromISO(item.date),
         updatedAt: DateTime.fromISO(item.updatedAt)

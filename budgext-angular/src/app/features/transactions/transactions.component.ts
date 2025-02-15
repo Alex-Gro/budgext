@@ -5,7 +5,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../core/auth/services/user.service';
 import { User } from '../../core/auth/user.model';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
@@ -14,6 +14,10 @@ import { MatList, MatListItem } from '@angular/material/list';
 import { MatInput } from '@angular/material/input';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
 import { DateTime } from 'luxon';
+import {
+  MAT_LUXON_DATE_ADAPTER_OPTIONS,
+  provideLuxonDateAdapter,
+} from '@angular/material-luxon-adapter';
 
 export interface TransactionsByDate {
   date: DateTime;
@@ -28,7 +32,8 @@ export const PICKER_DATE_FORMATS = {
     dateInput: 'MM.yyyy',
     monthYearLabel: 'MMM yyyy',
     dateA11yLabel: 'MMMM yyyy',
-    monthYearA11yLabel: 'MMMM yyyy',  },
+    monthYearA11yLabel: 'MMMM yyyy'
+  },
 };
 
 @Component({
@@ -55,7 +60,8 @@ export const PICKER_DATE_FORMATS = {
     MatDatepickerInput,
   ],
   providers: [
-    {provide: PICKER_DATE_FORMATS, useValue: PICKER_DATE_FORMATS}
+    {provide: MAT_LUXON_DATE_ADAPTER_OPTIONS, useValue: PICKER_DATE_FORMATS},
+    provideLuxonDateAdapter()
   ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.scss'
@@ -93,24 +99,15 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  onMonthSelected(event: Date, datepicker: MatDatepicker<DateTime>) {
-    console.log(DateTime.fromJSDate(event));
-/*
-    console.log(event.year);
-    console.log(event.month);
-    this.currentMonth = event;
-*/
-    datepicker.close();
-  }
-
-  onDateChange(event: DateTime | null): void {
+  onMonthSelected(event: DateTime, datepicker: MatDatepicker<DateTime>): void {
     if (event) {
-      const normalizedDate = event.startOf('month');
-      this.selectedYear = event.year;
-      this.selectedMonth = event.month - 1; // Luxon months are 1-based
+      const normalizedDate = event.startOf('day');
+      this.selectedYear = normalizedDate.year;
+      this.selectedMonth = normalizedDate.month - 1; // Luxon months are 1-based
       this.currentMonth = normalizedDate;
       this.filterTransactionsByDate();
     }
+    datepicker.close();
   }
 
   /**

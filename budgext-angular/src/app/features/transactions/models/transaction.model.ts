@@ -22,3 +22,14 @@ export interface TransactionFormGroup {
   updatedAt: FormControl<DateTime>,
   userId: FormControl<number>,
 }
+
+export interface ApiTransaction {
+  id: number | null,
+  amount: number,
+  type: string, // income || expense
+  title: string,
+  description: string,
+  date: string,
+  updatedAt: string,
+  userId: number,
+}
