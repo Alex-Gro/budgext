@@ -1,5 +1,4 @@
 // Transactions
-
 .transactions-container {
   display: flex;
   flex-direction: column;
@@ -72,12 +71,26 @@ mat-card {
 }
 
 // Search bar for filtering
-
 .search-container {
+  display: flex;
+  gap: 18px;
   .search-bar-width {
-    min-width: 40%;
+    min-width: 25%;
     mat-icon {
       color: var(--mat-sys-on-surface-variant) !important;
     }
+  }
+  .date-picker-field {
+    min-width: 125px;
+    max-width: 150px;
+  }
+}
+// Remove possibility to switch from month/year to days
+::ng-deep .month-year-picker {
+  .mat-calendar-period-button {
+    pointer-events: none !important;
+  }
+  .mat-calendar-arrow {
+    display: none !important;
   }
 }

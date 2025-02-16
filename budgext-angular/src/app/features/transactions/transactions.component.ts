@@ -5,7 +5,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../core/auth/services/user.service';
 import { User } from '../../core/auth/user.model';
-import { MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
@@ -14,17 +14,14 @@ import { MatList, MatListItem } from '@angular/material/list';
 import { MatInput } from '@angular/material/input';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
 import { DateTime } from 'luxon';
-import {
-  MAT_LUXON_DATE_ADAPTER_OPTIONS,
-  provideLuxonDateAdapter,
-} from '@angular/material-luxon-adapter';
+import {provideLuxonDateAdapter} from '@angular/material-luxon-adapter';
 
 export interface TransactionsByDate {
   date: DateTime;
   transactions: Transaction[];
 }
 
-export const PICKER_DATE_FORMATS = {
+export const GERMAN_DATE_FORMAT = {
   parse: {
     dateInput: 'MM.yyyy',
   },
@@ -60,8 +57,7 @@ export const PICKER_DATE_FORMATS = {
     MatDatepickerInput,
   ],
   providers: [
-    {provide: MAT_LUXON_DATE_ADAPTER_OPTIONS, useValue: PICKER_DATE_FORMATS},
-    provideLuxonDateAdapter()
+    provideLuxonDateAdapter(GERMAN_DATE_FORMAT)
   ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.scss'
@@ -77,10 +73,10 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   /** All available transactions from {@link filteredTransactions} filtered with current {@link searchTerm} */
   public filteredByDateTransactions: TransactionsByDate[] = [];
 
-  public currentMonth: DateTime = DateTime.local().startOf('month');
+  public currentDate: DateTime = DateTime.local().startOf('month');
 
-  public selectedMonth: number = this.currentMonth.month - 1; // Luxon months are 1-based
-  public selectedYear: number = this.currentMonth.year;
+  public selectedMonth: number = this.currentDate.month - 1; // Luxon months are 1-based
+  public selectedYear: number = this.currentDate.year;
 
   /** Search term entered by the user */
   public searchTerm: string = '';
@@ -104,7 +100,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       const normalizedDate = event.startOf('day');
       this.selectedYear = normalizedDate.year;
       this.selectedMonth = normalizedDate.month - 1; // Luxon months are 1-based
-      this.currentMonth = normalizedDate;
+      this.currentDate = normalizedDate;
       this.filterTransactionsByDate();
     }
     datepicker.close();
