@@ -10,6 +10,8 @@ export const routes: Routes = [
     component: MainLayoutComponent,
     children: [
       {path: '', component: HomeComponent},
+      {path: 'faq', loadComponent: () => import('./features/faq/faq.component').then((c) => c.FaqComponent)},
+      {path: 'contact', loadComponent: () => import('./features/contact/contact.component').then((c) => c.ContactComponent)},
       {path: 'login', loadComponent: () => import('./core/auth/login/login.component').then((c) => c.LoginComponent)},
       {path: 'signup', loadComponent: () => import('./core/auth/signup/signup.component').then((c) => c.SignupComponent)},
     ],

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatToolbar } from '@angular/material/toolbar';
@@ -9,6 +9,7 @@ import { User } from '../../auth/user.model';
 import { Subject, takeUntil } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatList, MatListItem } from '@angular/material/list';
 
 @Component({
   selector: 'app-header',
@@ -23,6 +24,9 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
     MatMenuTrigger,
     MatMenu,
     MatMenuItem,
+    MatList,
+    MatListItem,
+    RouterLinkActive,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
