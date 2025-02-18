@@ -1,21 +1,25 @@
 <mat-toolbar>
-  <h2><a class="brand-link" routerLink="/"><span class="brand-color">Budg</span>ext</a></h2>
+    <h2><a class="brand-link" routerLink="/"><span class="brand-color">Budg</span>ext</a></h2>
 
-  <mat-list>
-    <mat-list-item><a routerLink="/" routerLinkActive>home</a></mat-list-item>
-    <mat-list-item><a routerLink="/faq" routerLinkActive>FAQ</a></mat-list-item>
-    <mat-list-item><a routerLink="/contact" routerLinkActive>kontakt</a></mat-list-item>
-  </mat-list>
+    <nav class="main-nav">
+      <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      <a routerLink="/faq" routerLinkActive="active-link">FAQ</a>
+      <a routerLink="/contact" routerLinkActive="active-link">Kontakt</a>
+    </nav>
 
+    <div class="auth-buttons">
+      <button mat-stroked-button routerLink="/login">Login</button>
+      <button mat-flat-button color="primary" routerLink="/signup">Registrieren</button>
+    </div>
 
 
   <!--<span>
     <a routerLink="/" class="logo-router">
     <img ngSrc="assets/logo.svg" alt="Logo" class="logo" height="39" width="150" priority/>
     </a>
-  </span>-->
+  </span>
 
-  <!--<span class="spacer"></span>
+  <span class="spacer"></span>
     <ng-container *ifAuthenticated="true">
       @if (!userRoute) {
         <button class="margin-right-16" mat-flat-button routerLink="/user/dashboard">Benutzer-Dashboard</button>

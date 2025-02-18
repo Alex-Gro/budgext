@@ -9,7 +9,6 @@ import { User } from '../../auth/user.model';
 import { Subject, takeUntil } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
-import { MatList, MatListItem } from '@angular/material/list';
 
 @Component({
   selector: 'app-header',
@@ -24,8 +23,6 @@ import { MatList, MatListItem } from '@angular/material/list';
     MatMenuTrigger,
     MatMenu,
     MatMenuItem,
-    MatList,
-    MatListItem,
     RouterLinkActive,
   ],
   templateUrl: './header.component.html',

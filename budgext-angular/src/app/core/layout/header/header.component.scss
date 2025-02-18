@@ -1,22 +1,44 @@
 // new header
 mat-toolbar {
   display: flex;
-  justify-content: flex-start;
-  padding-top: 35px;
-}
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
 
-.brand-color {
-  color: var(--mat-sys-primary);
-}
+    .brand-link {
+      text-decoration: none;
+      color: #000000;
+      font-size: 30px;
+      font-weight: bold;
 
-.brand-link {
-  user-select: none;
-  text-decoration: none;
-  color: #000000;
-  font-size: 30px;
-  font-weight: bold;
-}
+      .brand-color {
+        color: var(--mat-sys-primary);
+      }
+    }
 
+  .main-nav {
+    display: flex;
+    gap: 2.5rem;
+    a {
+      text-decoration: none;
+      color: rgba(0, 0, 0, 0.87);
+      font-size: 14px;
+      transition: color 0.3s ease;
+      &:hover {
+        color: var(--mat-sys-primary);
+        background-color: transparent; // Remove Material hover bg
+      }
+      &.active-link {
+        color: var(--mat-sys-primary);
+        font-weight: 500;
+      }
+    }
+  }
+  .auth-buttons {
+    display: flex;
+    gap: 1.25rem;
+  }
+}
 
 
 // old header
