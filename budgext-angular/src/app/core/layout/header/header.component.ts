@@ -1,28 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
-import { NgOptimizedImage } from '@angular/common';
-import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
 import { MatToolbar } from '@angular/material/toolbar';
 import { UserService } from '../../auth/services/user.service';
 import { IfAuthenticatedDirective } from '../../auth/if-authenticated.directive';
 import { User } from '../../auth/user.model';
 import { Subject, takeUntil } from 'rxjs';
-import { MatIcon } from '@angular/material/icon';
-import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-header',
   imports: [
-    NgOptimizedImage,
     MatButton,
     RouterLink,
     MatToolbar,
     IfAuthenticatedDirective,
-    MatIconButton,
-    MatIcon,
-    MatMenuTrigger,
-    MatMenu,
-    MatMenuItem,
     RouterLinkActive,
   ],
   templateUrl: './header.component.html',

@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { MatCard } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-home',
   imports: [
-    MatSlideToggle,
+    MatCard,
+    MatIcon,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
