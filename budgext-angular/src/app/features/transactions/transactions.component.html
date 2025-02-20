@@ -20,6 +20,10 @@
                     (monthSelected)="onMonthSelected($event, monthYearPicker)">
     </mat-datepicker>
   </mat-form-field>
+  <!-- TODO Create pipe to sum transactions.amounts? -->
+  <div class="transactions-sum">
+    <span>100 €</span>
+  </div>
 </div>
 
 @if (filteredTransactions.length > 0 && filteredByDateTransactions.length > 0) {
@@ -65,85 +69,6 @@
   <p>No transactions available for this month.</p>
 }
 
-<!--<div>
-  <div class="manual-selection">
-    <mat-form-field appearance="fill">
-      <mat-label>Month</mat-label>
-      <mat-select [(value)]="selectedMonth" (selectionChange)="onMonthChange($event.value)">
-        @for (month of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]; track month) {
-          <mat-option [value]="month">
-            {{ monthNames[month] }}
-          </mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Year</mat-label>
-      <mat-select [(value)]="selectedYear" (selectionChange)="onYearChange($event.value)">
-        @for (year of [2025, 2024, 2023, 2022, 2021, 2020]; track year) {
-          <mat-option [value]="year">
-            {{ year }}
-          </mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-  </div>
-
-  @if(filteredTransactions.length > 0 && displayedColumns.length > 0) {
-  <mat-table [dataSource]="filteredTransactions">
-    <ng-container matColumnDef="_edit">
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
-      <mat-cell *matCellDef="let transaction">
-        <button class="action-button" mat-mini-fab routerLink="/user/transactions/{{transaction.id}}">
-          <mat-icon>edit</mat-icon>
-        </button>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="amount">
-      <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
-      <mat-cell *matCellDef="let transaction">
-        @if (transaction.type === 'expense') {
-          <p class="expense">(-) {{transaction.amount}} €</p>
-        } @else if (transaction.type === 'income') {
-          <p class="income">(+) {{transaction.amount}} €</p>
-        }
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="title">
-      <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
-      <mat-cell *matCellDef="let transaction">{{transaction.title}}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="description">
-      <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
-      <mat-cell *matCellDef="let transaction">{{transaction.description}}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="date">
-      <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-      <mat-cell *matCellDef="let transaction">{{transaction.date | date}}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="_delete">
-      <mat-header-cell *matHeaderCellDef>Remove</mat-header-cell>
-      <mat-cell *matCellDef="let transaction">
-        <button class="action-button delete-button" mat-mini-fab (click)="deleteTransaction(transaction.id)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-  } @else {
-    <p>No transactions available for this month.</p>
-  }
-
-  <button class="add-new-button" mat-mini-fab routerLink="/user/transactions/new">
-    <mat-icon>add</mat-icon>
-  </button>
-</div>-->
+<button class="add-new-button" mat-mini-fab routerLink="/user/transactions/new">
+  <mat-icon>add</mat-icon>
+</button>

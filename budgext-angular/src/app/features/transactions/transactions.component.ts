@@ -15,6 +15,7 @@ import { MatInput } from '@angular/material/input';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
 import { DateTime } from 'luxon';
 import {provideLuxonDateAdapter} from '@angular/material-luxon-adapter';
+import { MatMiniFabButton } from '@angular/material/button';
 
 export interface TransactionsByDate {
   date: DateTime;
@@ -55,6 +56,7 @@ export const GERMAN_DATE_FORMAT = {
     MatDatepicker,
     ReactiveFormsModule,
     MatDatepickerInput,
+    MatMiniFabButton,
   ],
   providers: [
     provideLuxonDateAdapter(GERMAN_DATE_FORMAT)
@@ -66,16 +68,23 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   private _ngUnsubscribe: Subject<void> = new Subject<void>();
 
   private _currentUser: User | null = null;
+
   /** All available transactions for this user */
   public transactions: Transaction[] = [];
+
   /** All available transactions for this user in defined period of time (month, year) */
   public filteredTransactions: Transaction[] = [];
+
   /** All available transactions from {@link filteredTransactions} filtered with current {@link searchTerm} */
   public filteredByDateTransactions: TransactionsByDate[] = [];
 
+  /** Saves the current date chosen by the user (by default this month, this year) */
   public currentDate: DateTime = DateTime.local().startOf('month');
 
+  /** Selected month from datepicker */
   public selectedMonth: number = this.currentDate.month - 1; // Luxon months are 1-based
+
+  /** Selected year from datepicker */
   public selectedYear: number = this.currentDate.year;
 
   /** Search term entered by the user */
@@ -95,6 +104,15 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     });
   }
 
+  // TODO NEXT: Add monthly transaction summary for chosen month
+  // TODO NEXT: Styling for transaction summary amount
+
+  /**
+   * Triggered by month selection in the datepicker.
+   * Normalizes the date, updates state, filters transactions and closes the datepicker
+   * @param event - Selected date
+   * @param datepicker - Reference to the datepicker
+   */
   onMonthSelected(event: DateTime, datepicker: MatDatepicker<DateTime>): void {
     if (event) {
       const normalizedDate = event.startOf('day');
@@ -167,7 +185,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   /**
    * Call {@link TransactionService} to delete the chosen transaction
-   * @param transactionId - Id of the transaction to delete
+   * @param transactionId - The id of the transaction to delete
    */
   deleteTransaction(transactionId: number): void {
     this.transactionService.deleteTransaction(transactionId).subscribe({
