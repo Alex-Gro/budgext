@@ -20,10 +20,15 @@
                     (monthSelected)="onMonthSelected($event, monthYearPicker)">
     </mat-datepicker>
   </mat-form-field>
-  <!-- TODO Create pipe to sum transactions.amounts? -->
+
   <div class="transactions-sum">
-    <span>100 €</span>
+    @if ((filteredByDateTransactions | transactionsSum) >= 0) {
+      <span class="positive">+{{filteredByDateTransactions | transactionsSum}} €</span>
+    } @else {
+      <span class="negative">{{filteredByDateTransactions | transactionsSum}} €</span>
+    }
   </div>
+
 </div>
 
 @if (filteredTransactions.length > 0 && filteredByDateTransactions.length > 0) {
@@ -35,7 +40,6 @@
             {{ groupedByDateTransactions.date.toFormat('dd.MM.yyyy') }}
           </mat-card-title>
         </mat-card-header>
-
         <mat-card-content>
           <mat-list>
             @for (transaction of groupedByDateTransactions.transactions; track transaction.id) {

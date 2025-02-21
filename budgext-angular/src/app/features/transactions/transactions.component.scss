@@ -96,6 +96,12 @@ mat-card {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   height: 56px;
+  .positive {
+    color: var(--mat-sys-primary);
+  }
+  .negative {
+    color: var(--mat-sys-error);
+  }
 }
 
 // Remove possibility to switch from month/year to days

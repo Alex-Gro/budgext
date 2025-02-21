@@ -16,6 +16,7 @@ import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular
 import { DateTime } from 'luxon';
 import {provideLuxonDateAdapter} from '@angular/material-luxon-adapter';
 import { MatMiniFabButton } from '@angular/material/button';
+import { TransactionsSumPipe } from '../../shared/pipes/transactions-sum.pipe';
 
 export interface TransactionsByDate {
   date: DateTime;
@@ -37,6 +38,7 @@ export const GERMAN_DATE_FORMAT = {
 @Component({
   selector: 'app-transactions',
   imports: [
+    TransactionsSumPipe,
     MatFormFieldModule,
     MatNativeDateModule,
     MatIcon,
@@ -103,9 +105,6 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         this.filterTransactionsByDate();
     });
   }
-
-  // TODO NEXT: Add monthly transaction summary for chosen month
-  // TODO NEXT: Styling for transaction summary amount
 
   /**
    * Triggered by month selection in the datepicker.
@@ -183,6 +182,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     this.updateFilteredGroups();
   }
 
+  // TODO Remove if not necessary anymore!?
   /**
    * Call {@link TransactionService} to delete the chosen transaction
    * @param transactionId - The id of the transaction to delete

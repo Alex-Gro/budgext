@@ -51,6 +51,8 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private router: Router) {}
 
+  // TODO Change amount input to "string" but its not a string (-> number)
+  // TODO Fix date formatting (date input not showing date correctly)
 
   ngOnInit(): void {
     // TODO If !userId then redirect to login or dont do the rest of ngOnInit() ?
