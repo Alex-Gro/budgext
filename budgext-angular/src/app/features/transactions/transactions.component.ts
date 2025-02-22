@@ -23,7 +23,7 @@ export interface TransactionsByDate {
   transactions: Transaction[];
 }
 
-export const GERMAN_DATE_FORMAT = {
+export const GERMAN_MONTH_YEAR_FORMAT = {
   parse: {
     dateInput: 'MM.yyyy',
   },
@@ -61,7 +61,7 @@ export const GERMAN_DATE_FORMAT = {
     MatMiniFabButton,
   ],
   providers: [
-    provideLuxonDateAdapter(GERMAN_DATE_FORMAT)
+    provideLuxonDateAdapter(GERMAN_MONTH_YEAR_FORMAT)
   ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.scss'

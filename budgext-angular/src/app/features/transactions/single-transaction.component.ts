@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatCard } from '@angular/material/card';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatError, MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
@@ -13,6 +13,19 @@ import { Transaction, TransactionFormGroup } from './models/transaction.model';
 import { MatNativeDateModule } from '@angular/material/core';
 import { UserService } from '../../core/auth/services/user.service';
 import { DateTime } from 'luxon';
+import { provideLuxonDateAdapter } from '@angular/material-luxon-adapter';
+
+export const GERMAN_DATE_FORMATS = {
+  parse: {
+    dateInput: 'dd.MM.yyyy',
+  },
+  display: {
+    dateInput: 'dd.MM.yyyy',
+    monthYearLabel: 'MMM yyyy',
+    dateA11yLabel: 'dd. MMMM yyyy',
+    monthYearA11yLabel: 'MMMM yyyy'
+  },
+};
 
 @Component({
   selector: 'app-single-transaction',
@@ -30,6 +43,10 @@ import { DateTime } from 'luxon';
     MatDatepicker,
     MatNativeDateModule,
     MatButton,
+    MatSuffix,
+  ],
+  providers: [
+    provideLuxonDateAdapter(GERMAN_DATE_FORMATS),
   ],
   templateUrl: './single-transaction.component.html',
   styleUrl: './single-transaction.component.scss'
@@ -52,7 +69,7 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
               private router: Router) {}
 
   // TODO Change amount input to "string" but its not a string (-> number)
-  // TODO Fix date formatting (date input not showing date correctly)
+  // TODO After saving (esp new date/other date) of existing date, coming back in transactions does not change dates
 
   ngOnInit(): void {
     // TODO If !userId then redirect to login or dont do the rest of ngOnInit() ?
@@ -87,6 +104,7 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
         }
       });
     }
+    console.log(this.formGroup);
   }
 
   createFormGroup(transaction: Transaction): FormGroup<TransactionFormGroup> {

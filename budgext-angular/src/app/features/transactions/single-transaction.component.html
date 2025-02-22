@@ -1,6 +1,5 @@
 @if (formGroup) {
   <mat-card [formGroup]="formGroup">
-
     @if (creating) {
     <h3>Transaktion erstellen</h3>
     } @else {
@@ -32,12 +31,13 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Date</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Select a date" required>
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
+      <mat-label>Datum</mat-label>
+      <input matInput [matDatepicker]="dp" formControlName="date" readonly required>
+      <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+      <mat-datepicker #dp></mat-datepicker>
       <mat-error>Erforderlich</mat-error>
     </mat-form-field>
+
     @if (isNewTransaction) {
     <button mat-flat-button (click)="createTransaction()">Create Transaction</button>
     } @else {
