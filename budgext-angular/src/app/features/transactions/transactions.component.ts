@@ -17,6 +17,7 @@ import { DateTime } from 'luxon';
 import {provideLuxonDateAdapter} from '@angular/material-luxon-adapter';
 import { MatMiniFabButton } from '@angular/material/button';
 import { TransactionsSumPipe } from '../../shared/pipes/transactions-sum.pipe';
+import { DecimalPipe } from '@angular/common';
 
 export interface TransactionsByDate {
   date: DateTime;
@@ -59,6 +60,7 @@ export const GERMAN_MONTH_YEAR_FORMAT = {
     ReactiveFormsModule,
     MatDatepickerInput,
     MatMiniFabButton,
+    DecimalPipe,
   ],
   providers: [
     provideLuxonDateAdapter(GERMAN_MONTH_YEAR_FORMAT)

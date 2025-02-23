@@ -68,7 +68,6 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private router: Router) {}
 
-  // TODO Change amount input to "string" but its not a string (-> number)
   // TODO After saving (esp new date/other date) of existing date, coming back in transactions does not change dates
 
   ngOnInit(): void {
@@ -104,13 +103,12 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
         }
       });
     }
-    console.log(this.formGroup);
   }
 
   createFormGroup(transaction: Transaction): FormGroup<TransactionFormGroup> {
     return new FormGroup<TransactionFormGroup>({
       id: new FormControl<number | null>(transaction?.id || null),
-      amount: new FormControl<number>(transaction?.amount || 0, {validators: [Validators.required], nonNullable: true}),
+      amount: new FormControl<number>(transaction?.amount || 0, {validators: [Validators.required, Validators.pattern('^\\d+(?:[.,]\\d{1,2})?$')], nonNullable: true}),
       type: new FormControl<string>(transaction?.type || 'expense', {validators: [Validators.required], nonNullable: true}),
       title: new FormControl<string>(transaction?.title || '', {validators: [Validators.required], nonNullable: true}),
       description: new FormControl<string>(transaction?.description || '', {nonNullable: true}),
@@ -122,7 +120,11 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
 
   createTransaction() {
     if (this.formGroup) {
-      this.transactionService.createTransaction(this.formGroup.value as Transaction).subscribe({
+      // TODO Other option possible?
+      const formValue = this.formGroup.value;
+      const amountString = formValue.amount?.toString();
+      formValue.amount = amountString ? parseFloat(amountString.replace(',', '.')) : 0;
+      this.transactionService.createTransaction(formValue as Transaction).subscribe({
         next: () => {
           console.log('Transaction created');
           this.router.navigate(['/user/transactions']);
@@ -136,7 +138,11 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
 
   updateTransaction() {
     if (this.formGroup && this._transaction?.id) {
-      this.transactionService.updateTransaction(this._transaction.id, this.formGroup.value as Transaction).subscribe({
+      // TODO Other option possible?
+      const formValue = this.formGroup.value;
+      const amountString = formValue.amount?.toString();
+      formValue.amount = amountString ? parseFloat(amountString.replace(',', '.')) : 0;
+      this.transactionService.updateTransaction(this._transaction.id, formValue as Transaction).subscribe({
         next: () => {
           console.log('Transaction updated');
           this.router.navigate(['/user/transactions']);

@@ -59,32 +59,57 @@ export class TransactionService implements OnDestroy {
   }
 
   createTransaction(newTransaction: Transaction): Observable<Transaction> {
-    // TODO Return dates back to ISOString for database/backend
-    return this.http.post<Transaction>('/transactions', newTransaction).pipe(
+    // Convert from DateTime (luxon) to ISODate for backend
+    const transactionPayload = {
+      ...newTransaction,
+      date: newTransaction.date.toISODate(),
+      updatedAt: newTransaction.updatedAt.toISODate()
+    };
+    return this.http.post<ApiTransaction>('/transactions', transactionPayload).pipe(
       shareReplay(1),
-      tap((createdTransaction) => {
-        if (createdTransaction && createdTransaction.id) {
-          const updatedTransactions = [...this.transactionsSubject.value, createdTransaction];
+      map((createdTransaction: ApiTransaction) => ({
+        ...createdTransaction,
+        date: DateTime.fromISO(createdTransaction.date),
+        updatedAt: DateTime.fromISO(createdTransaction.updatedAt)
+      })),
+      tap((mappedTransaction: Transaction) => {
+        if (mappedTransaction && mappedTransaction.id) {
+          const updatedTransactions: Transaction[] = [...this.transactionsSubject.value, mappedTransaction];
           this.transactionsSubject.next(updatedTransactions);
         } else {
-          console.error('Transaction creation failed', createdTransaction);
+          console.error('Transaction creation failed', mappedTransaction);
         }
       })
     );
   }
 
   updateTransaction(transactionId: number, updatedTransaction: Transaction): Observable<Transaction> {
-    // TODO Return dates back to ISOString for database/backend
-    return this.http.patch<Transaction>(`/transactions/${transactionId}`, updatedTransaction).pipe(
+    // Convert from DateTime (luxon) to ISODate for backend
+    const transactionPayload = {
+      ...updatedTransaction,
+      date: updatedTransaction.date.toISODate(),
+      updatedAt: updatedTransaction.updatedAt.toISODate()
+    };
+    return this.http.patch<ApiTransaction>(`/transactions/${transactionId}`, transactionPayload).pipe(
       shareReplay(1),
-      tap((updatedTransaction) => {
-        if (updatedTransaction && updatedTransaction.id) {
-          const updatedTransactions = this.transactionsSubject.value.map((transaction) =>
-            transaction.id === updatedTransaction.id ? updatedTransaction : transaction
-          );
-          this.transactionsSubject.next(updatedTransactions);
+      map((responseTransaction: ApiTransaction) => ({
+        ...responseTransaction,
+        date: DateTime.fromISO(responseTransaction.date),
+        updatedAt: DateTime.fromISO(responseTransaction.updatedAt)
+      })),
+      tap((mappedTransaction: Transaction) => {
+        if (mappedTransaction && mappedTransaction.id) {
+          const currentTransaction = this.transactionsSubject.value;
+          const index = currentTransaction.findIndex((transaction) => transaction.id === mappedTransaction.id);
+          if (index !== -1) {
+            const updatedTransactions = [...currentTransaction];
+            updatedTransactions[index] = mappedTransaction;
+            this.transactionsSubject.next(updatedTransactions);
+          } else {
+            console.error('Transaction update failed', mappedTransaction);
+          }
         } else {
-          console.error('Transaction update failed', updatedTransaction);
+          console.error('Transaction update failed', mappedTransaction);
         }
       }),
       catchError((err) => {

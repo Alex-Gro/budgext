@@ -7,8 +7,13 @@
     }
     <mat-form-field appearance="fill">
       <mat-label>Amount</mat-label>
-      <input matInput type="number" formControlName="amount" placeholder="Enter amount" required>
-      <mat-error>Erforderlich</mat-error>
+      <input matInput type="text" formControlName="amount" placeholder="Enter amount" required>
+      @if (formGroup.get('amount')?.hasError('required')) {
+        <mat-error>Erforderlich</mat-error>
+      } @else if (formGroup.get('amount')?.hasError('pattern')) {
+        <mat-error>Nur Zahlen eingeben mit maximal zwei Nachkommastellen</mat-error>
+      }
+
     </mat-form-field>
 
     <mat-form-field appearance="fill">

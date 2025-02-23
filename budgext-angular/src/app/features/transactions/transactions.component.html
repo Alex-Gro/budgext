@@ -23,12 +23,11 @@
 
   <div class="transactions-sum">
     @if ((filteredByDateTransactions | transactionsSum) >= 0) {
-      <span class="positive">+{{filteredByDateTransactions | transactionsSum}} €</span>
+      <span class="positive">+{{filteredByDateTransactions | transactionsSum | number:'1.2-2'}} €</span>
     } @else {
-      <span class="negative">{{filteredByDateTransactions | transactionsSum}} €</span>
+      <span class="negative">{{filteredByDateTransactions | transactionsSum | number: '1.2-2'}} €</span>
     }
   </div>
-
 </div>
 
 @if (filteredTransactions.length > 0 && filteredByDateTransactions.length > 0) {
@@ -37,7 +36,7 @@
       <mat-card class="date-group">
         <mat-card-header>
           <mat-card-title class="date-title">
-            {{ groupedByDateTransactions.date.toFormat('dd.MM.yyyy') }}
+            {{groupedByDateTransactions.date.toFormat('dd.MM.yyyy')}}
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
@@ -46,18 +45,18 @@
               <mat-list-item class="transaction-item" routerLink="/user/transactions/{{transaction.id}}">
                 <div class="transaction-content">
                   <div class="text-content">
-                    <span>{{ transaction.title }}</span>
+                    <span>{{transaction.title}}</span>
                     @if (transaction.description) {
-                      <span class="description mat-body">{{ transaction.description }}</span>
+                      <span class="description mat-body">{{transaction.description}}</span>
                     }
                   </div>
                   @if (transaction.type === 'income') {
                     <div class="amount income">
-                      +{{ transaction.amount }} €
+                      +{{transaction.amount | number: '1.2-2'}} €
                     </div>
                   } @else if (transaction.type === 'expense') {
                     <div class="amount expense">
-                      -{{ transaction.amount }} €
+                      -{{transaction.amount | number: '1.2-2'}} €
                     </div>
                   }
 

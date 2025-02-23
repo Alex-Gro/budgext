@@ -6,11 +6,15 @@ import { TransactionsByDate } from '../../features/transactions/transactions.com
 })
 export class TransactionsSumPipe implements PipeTransform {
   transform(transactions: TransactionsByDate[]): number {
-    return transactions.reduce((total, group) =>
+    const sum = transactions.reduce((total, group) =>
         total + group.transactions.reduce((groupTotal, {type, amount}) =>
             type === 'income' ? groupTotal + amount : groupTotal - amount
           , 0)
       , 0);
+    return isNaN(sum) ? 0.00 : this.roundToCent(sum);
   }
 
+  private roundToCent(value: number): number {
+    return Math.round((value + Number.EPSILON) * 100) / 100;
+  }
 }
