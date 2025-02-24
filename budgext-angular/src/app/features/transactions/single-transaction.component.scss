@@ -5,5 +5,44 @@ mat-card {
 }
 
 mat-form-field, button {
-  max-width: 250px;
+  max-width: 350px;
+}
+
+.form-row {
+  display: flex;
+  gap: 1.5rem;
+  width: 350px;
+  .form-field {
+    max-width: calc(50% - 0.75rem); // subtract by gap value
+  }
+}
+
+.type-toggle {
+  margin: 2rem 0;
+  mat-button-toggle-group {
+    width: 350px;
+    mat-button-toggle {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &.income-toggle {
+        background-color: rgba(163, 245, 179, 0.5);
+        &.mat-button-toggle-checked {
+          background-color: rgba(163, 245, 179, 1);
+        }
+      }
+      &.expense-toggle {
+        background-color: rgba(244, 67, 54, 0.1);
+        &.mat-button-toggle-checked {
+          background-color: rgba(244, 67, 54, 0.4);
+        }
+      }
+
+      mat-icon {
+        color: inherit;
+      }
+    }
+  }
 }

@@ -5,16 +5,39 @@
     } @else {
     <h3>Transaktion ändern</h3>
     }
-    <mat-form-field appearance="fill">
-      <mat-label>Amount</mat-label>
-      <input matInput type="text" formControlName="amount" placeholder="Enter amount" required>
-      @if (formGroup.get('amount')?.hasError('required')) {
-        <mat-error>Erforderlich</mat-error>
-      } @else if (formGroup.get('amount')?.hasError('pattern')) {
-        <mat-error>Nur Zahlen eingeben mit maximal zwei Nachkommastellen</mat-error>
-      }
 
-    </mat-form-field>
+    <div class="type-toggle">
+      <mat-button-toggle-group formControlName="type">
+        <mat-button-toggle class="income-toggle" value="income">
+          Einnahme
+          <mat-icon>arrow_upward</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle class="expense-toggle" value="expense">
+          Ausgabe
+          <mat-icon>arrow_downward</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Amount</mat-label>
+        <input matInput type="text" formControlName="amount" placeholder="Enter amount" required>
+        @if (formGroup.get('amount')?.hasError('required')) {
+          <mat-error>Erforderlich</mat-error>
+        } @else if (formGroup.get('amount')?.hasError('pattern')) {
+          <mat-error>Nur Zahlen eingeben mit maximal zwei Nachkommastellen</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Datum</mat-label>
+        <input matInput [matDatepicker]="dp" formControlName="date" readonly required>
+        <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+        <mat-datepicker #dp></mat-datepicker>
+        <mat-error>Erforderlich</mat-error>
+      </mat-form-field>
+    </div>
 
     <mat-form-field appearance="fill">
       <mat-label>Title</mat-label>
@@ -23,24 +46,8 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Type</mat-label>
-      <mat-select formControlName="type">
-        <mat-option value="income">Income</mat-option>
-        <mat-option value="expense">Expense</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
       <mat-label>Description</mat-label>
       <input matInput type="text" formControlName="description" placeholder="Enter description">
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Datum</mat-label>
-      <input matInput [matDatepicker]="dp" formControlName="date" readonly required>
-      <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
-      <mat-datepicker #dp></mat-datepicker>
-      <mat-error>Erforderlich</mat-error>
     </mat-form-field>
 
     @if (isNewTransaction) {

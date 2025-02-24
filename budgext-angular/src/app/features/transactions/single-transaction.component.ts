@@ -3,7 +3,6 @@ import { MatCard } from '@angular/material/card';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatError, MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { MatOption, MatSelect } from '@angular/material/select';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
 import { MatButton } from '@angular/material/button';
 import { TransactionService } from './services/transaction.service';
@@ -14,6 +13,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { UserService } from '../../core/auth/services/user.service';
 import { DateTime } from 'luxon';
 import { provideLuxonDateAdapter } from '@angular/material-luxon-adapter';
+import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
+import { MatIcon } from '@angular/material/icon';
 
 export const GERMAN_DATE_FORMATS = {
   parse: {
@@ -36,14 +37,15 @@ export const GERMAN_DATE_FORMATS = {
     MatInput,
     MatLabel,
     MatError,
-    MatSelect,
-    MatOption,
     MatDatepickerInput,
     MatDatepickerToggle,
     MatDatepicker,
     MatNativeDateModule,
     MatButton,
     MatSuffix,
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    MatIcon,
   ],
   providers: [
     provideLuxonDateAdapter(GERMAN_DATE_FORMATS),
