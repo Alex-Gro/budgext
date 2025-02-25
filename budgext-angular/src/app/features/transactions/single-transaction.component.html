@@ -53,7 +53,7 @@
     @if (isNewTransaction) {
     <button mat-flat-button (click)="createTransaction()">Create Transaction</button>
     } @else {
-    <button mat-flat-button (click)="updateTransaction()">Update Transaction</button>
+    <button mat-flat-button [disabled]="formGroup.invalid || !formGroup.dirty" (click)="updateTransaction()">Update Transaction</button>
     }
   </mat-card>
 }

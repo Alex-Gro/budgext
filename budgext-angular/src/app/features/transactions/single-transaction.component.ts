@@ -101,13 +101,14 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
           if (this._transaction) {
             this.isNewTransaction = false;
             this.formGroup = this.createFormGroup(this._transaction);
+            this.formGroupChanges();
           }
         }
       });
     }
   }
 
-  createFormGroup(transaction: Transaction): FormGroup<TransactionFormGroup> {
+  private createFormGroup(transaction: Transaction): FormGroup<TransactionFormGroup> {
     return new FormGroup<TransactionFormGroup>({
       id: new FormControl<number | null>(transaction?.id || null),
       amount: new FormControl<number>(transaction?.amount || 0, {validators: [Validators.required, Validators.pattern('^\\d+(?:[.,]\\d{1,2})?$')], nonNullable: true}),
@@ -120,6 +121,63 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Used to check for pristine dirty in the current formGroup
+   * @private
+   */
+  private formGroupChanges(): void {
+    if (!this.formGroup || !this._transaction) {
+      console.error('Form or transaction not found!');
+      return;
+    }
+    if (this.formGroup) {
+      type TransactionKey = keyof Transaction;
+      this.formGroup.valueChanges.pipe(
+        takeUntil(this._ngUnsubscribe),
+      )
+      .subscribe((value) => {
+        Object.keys(value).forEach((key) => {
+          const transactionKey = key as TransactionKey;
+          if (this._transaction) {
+            if (!this.compareValues(value[transactionKey], this._transaction[transactionKey])) {
+              this.formGroup?.get(transactionKey)?.markAsDirty();
+            } else {
+              this.formGroup?.get(transactionKey)?.markAsPristine();
+            }
+          }
+        });
+      });
+    }
+  }
+
+  /**
+   * Compares two values if they are completely the same
+   * @param a - First value to check
+   * @param b - Second value to check
+   */
+  private compareValues(a: any, b: any): boolean {
+    if (a === null || b === null) {
+      return a === b;
+    }
+
+    if (a instanceof DateTime && b instanceof DateTime) {
+      return a.day === b.day && a.month === b.month && a.year === b.year;
+    }
+
+    if (Array.isArray(a) && Array.isArray(b)) {
+      return a.length === b.length && a.every((val, index) => this.compareValues(val, b[index]));
+    }
+
+    if (typeof a === 'object' && typeof b === 'object') {
+      const aKeys = Object.keys(a);
+      const bKeys = Object.keys(b);
+      return aKeys.length === bKeys.length && aKeys.every((key) => this.compareValues(a[key], b[key]));
+    }
+
+    // TODO normally transaction.amount is a number, but after inputting it, it is a string - so string !== number
+    return a.toString() === b.toString();
+  }
+
   createTransaction() {
     if (this.formGroup) {
       // TODO Other option possible?
@@ -128,6 +186,7 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
       formValue.amount = amountString ? parseFloat(amountString.replace(',', '.')) : 0;
       this.transactionService.createTransaction(formValue as Transaction).subscribe({
         next: () => {
+          // TODO If staying in editor - updateFormGroup needed
           console.log('Transaction created');
           this.router.navigate(['/user/transactions']);
         },
@@ -146,6 +205,7 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
       formValue.amount = amountString ? parseFloat(amountString.replace(',', '.')) : 0;
       this.transactionService.updateTransaction(this._transaction.id, formValue as Transaction).subscribe({
         next: () => {
+          // TODO If staying in editor - updateFormGroup needed
           console.log('Transaction updated');
           this.router.navigate(['/user/transactions']);
         },
