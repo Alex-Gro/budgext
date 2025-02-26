@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Balance } from '@prisma/client';
 
@@ -6,12 +6,16 @@ import { Balance } from '@prisma/client';
 export class BalanceService {
   constructor(private prismaService: PrismaService) {}
 
-  getUserBalance(userId: number): Promise<Balance | undefined> {
-    return this.prismaService.balance.findFirst({
+  async getUserBalance(userId: number): Promise<Balance> {
+    const balance = await this.prismaService.balance.findFirst({
       where: {
         userId
       }
     });
+    if (!balance) {
+      throw new NotFoundException(`Balance for user with ID ${userId} not found`);
+    }
+    return balance;
   }
 
 }

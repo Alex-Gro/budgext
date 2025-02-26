@@ -15,13 +15,13 @@ export class UserController {
   // UseGuards(JwtGuard) here would JwtGuard just this function
   @HttpCode(HttpStatus.OK)
   @Get('getUser')
-  getUser(@GetUser() user: User) {
+  getUser(@GetUser() user: User): User {
     return user;
   }
 
   @HttpCode(HttpStatus.OK)
   @Patch('editUser')
-  editUser(@GetUser('id') userId: number, @Body() dto: EditUserDto) {
+  editUser(@GetUser('id') userId: number, @Body() dto: EditUserDto): Promise<User> {
     return this.userService.editUser(userId, dto);
   }
 
@@ -33,7 +33,7 @@ export class UserController {
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  deleteUser(@GetUser('id') userId: number) {
+  deleteUser(@GetUser('id') userId: number): Promise<boolean> {
     return this.userService.deleteUser(userId);
   }
 }

@@ -13,7 +13,7 @@ export class AuthService {
               private jwt: JwtService,
               private configService: ConfigService) {}
 
-  async signUp(dto: AuthDto) {
+  async signUp(dto: AuthDto): Promise<{access_token: string, user: User}> {
     // generate the password hash
     const hash = await argon.hash(dto.password);
     // save the new user in the db
@@ -33,7 +33,7 @@ export class AuthService {
         });
         return createdUser;
       });
-      // return the saved user
+      // return the saved user token
       return this.signToken(user);
     } catch(error) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -47,7 +47,7 @@ export class AuthService {
     }
   }
 
-  async login(dto: AuthDto) {
+  async login(dto: AuthDto): Promise<{access_token: string, user: User}> {
     // find the user by email
     const user: User = await this.prismaService.user.findUnique({
       where: {
@@ -67,10 +67,14 @@ export class AuthService {
     if (!pwMatches) {
       throw new ForbiddenException('Credentials incorrect');
     }
-    // send back the user
+    // send back the user token
     return this.signToken(user);
   }
 
+  /**
+   * Signs the JWT token and returns it
+   * @param user - The user a JWT token will get created for
+   */
   async signToken(user: User): Promise<{access_token: string, user: User}> {
     delete user.password;
 

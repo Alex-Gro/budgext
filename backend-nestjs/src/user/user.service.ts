@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { EditUserDto } from './dto';
 import { User } from '@prisma/client';
@@ -9,7 +9,7 @@ import * as argon from 'argon2'
 export class UserService {
   constructor(private prismaService: PrismaService) {}
 
-  async editUser(userId: number, dto: EditUserDto): Promise<User | undefined> {
+  async editUser(userId: number, dto: EditUserDto): Promise<User> {
     const user = await this.prismaService.user.update({
       where: {
         id: userId,
@@ -18,6 +18,9 @@ export class UserService {
         ...dto,
       }
     });
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
     delete user.password;
     return user;
   }
