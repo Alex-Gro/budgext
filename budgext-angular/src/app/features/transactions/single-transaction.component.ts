@@ -100,7 +100,7 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
           this._transaction = transactions.find((transaction: Transaction) => transaction.id === parseInt(id, 10)) || null;
           if (this._transaction) {
             this.isNewTransaction = false;
-            this.formGroup = this.createFormGroup(this._transaction);
+            this.formGroup = this.createFormGroup(this._transaction) || null;
             this.formGroupChanges();
           }
         }
@@ -110,6 +110,7 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
 
   private createFormGroup(transaction: Transaction): FormGroup<TransactionFormGroup> {
     return new FormGroup<TransactionFormGroup>({
+      // TODO Add createdAt ?
       id: new FormControl<number | null>(transaction?.id || null),
       amount: new FormControl<number>(transaction?.amount || 0, {validators: [Validators.required, Validators.pattern('^\\d+(?:[.,]\\d{1,2})?$')], nonNullable: true}),
       type: new FormControl<string>(transaction?.type || 'expense', {validators: [Validators.required], nonNullable: true}),

@@ -1,6 +1,14 @@
+.container {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1.5rem;
+}
+
 mat-card {
   padding: 25px;
-  width: 700px;
+  width: 400px;
+  margin-bottom: 25px;
+  background-color: var(--mat-sys-surface-container-lowest);
 }
 
 mat-form-field, button {
