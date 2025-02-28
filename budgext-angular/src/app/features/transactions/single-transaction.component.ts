@@ -70,54 +70,52 @@ export class SingleTransactionComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private router: Router) {}
 
-  // TODO After saving (esp new date/other date) of existing date, coming back in transactions does not change dates
-
   ngOnInit(): void {
     // TODO If !userId then redirect to login or dont do the rest of ngOnInit() ?
     this.userService.currentUser$.pipe(takeUntil(this._ngUnsubscribe), map((user) => user?.id))
     .subscribe((userId) => this._userId = userId || null);
+    if (this._userId) {
+      const id = this.route.snapshot.paramMap.get('id');
+      if (id === 'new') {
+        this.creating = true;
+        this.isNewTransaction = true;
+        this._transaction = null;
+        this.formGroup = this.createFormGroup({
+          id: null,
+          amount: 0,
+          type: 'expense',
+          title: '',
+          description: '',
+          date: DateTime.now(),
+          updatedAt: DateTime.now(),
+          userId: this._userId,
+        } as Transaction);
 
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id === 'new') {
-      this.creating = true;
-      this.isNewTransaction = true;
-      this._transaction = null;
-      this.formGroup = this.createFormGroup({
-        id: null,
-        amount: 0,
-        type: 'expense',
-        title: '',
-        description: '',
-        date: DateTime.now(),
-        updatedAt: DateTime.now(),
-        userId: this._userId,
-      } as Transaction);
-
-    } else if (id && !isNaN(parseInt(id, 10))) {
-      this.creating = false;
-      this.transactionService.transactions$.pipe(takeUntil(this._ngUnsubscribe)).subscribe((transactions) => {
-        if (transactions) {
-          this._transaction = transactions.find((transaction: Transaction) => transaction.id === parseInt(id, 10)) || null;
-          if (this._transaction) {
-            this.isNewTransaction = false;
-            this.formGroup = this.createFormGroup(this._transaction) || null;
-            this.formGroupChanges();
+      } else if (id && !isNaN(parseInt(id, 10))) {
+        this.creating = false;
+        this.transactionService.transactions$.pipe(takeUntil(this._ngUnsubscribe)).subscribe((transactions) => {
+          if (transactions) {
+            this._transaction = transactions.find((transaction: Transaction) => transaction.id === parseInt(id, 10)) || null;
+            if (this._transaction) {
+              this.isNewTransaction = false;
+              this.formGroup = this.createFormGroup(this._transaction) || null;
+              this.formGroupChanges();
+            }
           }
-        }
-      });
+        });
+      }
     }
   }
 
   private createFormGroup(transaction: Transaction): FormGroup<TransactionFormGroup> {
     return new FormGroup<TransactionFormGroup>({
-      // TODO Add createdAt ?
       id: new FormControl<number | null>(transaction?.id || null),
       amount: new FormControl<number>(transaction?.amount || 0, {validators: [Validators.required, Validators.pattern('^\\d+(?:[.,]\\d{1,2})?$')], nonNullable: true}),
       type: new FormControl<string>(transaction?.type || 'expense', {validators: [Validators.required], nonNullable: true}),
       title: new FormControl<string>(transaction?.title || '', {validators: [Validators.required], nonNullable: true}),
       description: new FormControl<string>(transaction?.description || '', {nonNullable: true}),
-      date: new FormControl<DateTime>(transaction?.date || new Date(), {validators: [Validators.required], nonNullable: true}),
-      updatedAt: new FormControl<DateTime>(transaction?.updatedAt || new Date(), {validators: [Validators.required], nonNullable: true}),
+      date: new FormControl<DateTime>(transaction?.date || DateTime.now().startOf('month'), {validators: [Validators.required], nonNullable: true}),
+      updatedAt: new FormControl<DateTime>(transaction?.updatedAt || DateTime.now().startOf('month'), {validators: [Validators.required], nonNullable: true}),
       userId: new FormControl<number>(transaction?.userId, {validators: [Validators.required], nonNullable: true}),
     });
   }

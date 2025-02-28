@@ -5,9 +5,10 @@ import { MatInput } from '@angular/material/input';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { Subject, takeUntil } from 'rxjs';
-import { User } from '../../core/auth/user.model';
+import { User, UserFormGroup } from '../../core/auth/user.model';
 import { UserService } from '../../core/auth/services/user.service';
 import { DateTime } from 'luxon';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-user-settings',
@@ -19,6 +20,7 @@ import { DateTime } from 'luxon';
     MatButton,
     MatLabel,
     MatError,
+    MatIcon,
   ],
   templateUrl: './user-settings.component.html',
   styleUrl: './user-settings.component.scss'
@@ -28,7 +30,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
   private _me: User | null = null;
 
-  public formGroup: FormGroup | null = null;
+  public formGroup: FormGroup<UserFormGroup> | null = null;
 
   // TODO changing password in separate environment? Step by step GUI?
   public passwordControl: FormControl<string> = new FormControl<string>('', {
@@ -44,19 +46,18 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     this.formGroupChanges();
   }
 
-  createUserFormGroup(): FormGroup | null {
-    // TODO Add createdAt as DateTime / updatedAt too?
+  createUserFormGroup(): FormGroup<UserFormGroup> | null {
     if (this._me) {
-      return new FormGroup({
+      return new FormGroup<UserFormGroup>({
         id: new FormControl<number>(this._me.id),
         email: new FormControl<string>(this._me.email, {
           validators: [Validators.required, Validators.email],
           nonNullable: true,
         }),
-        createdAt: new FormControl<string>(this._me.createdAt),
-        firstname: new FormControl<string>(this._me.firstname),
-        lastname: new FormControl<string>(this._me.lastname),
-        displayName: new FormControl<string>(this._me.displayName),
+        createdAt: new FormControl<DateTime>(this._me?.createdAt || DateTime.now(), {nonNullable: true}),
+        firstname: new FormControl<string>(this._me.firstname, {nonNullable: true}),
+        lastname: new FormControl<string>(this._me.lastname, {nonNullable: true}),
+        displayName: new FormControl<string>(this._me.displayName, {nonNullable: true}),
       });
     } else {
       return null;

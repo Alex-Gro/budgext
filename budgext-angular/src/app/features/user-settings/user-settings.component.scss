@@ -14,3 +14,24 @@ mat-card {
 mat-form-field, button {
   max-width: 250px;
 }
+
+// TODO CreatedAt Account - Necessary?
+.creation-date {
+  user-select: none;
+  margin: 0 0 2rem 0;
+  padding: 12px 16px;
+  border-radius: 4px;
+  background: var(--mat-sys-surface-variant);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9em;
+
+  mat-icon {
+    margin-right: 0.5rem;
+    font-size: 24px;
+    height: 24px;
+    width: 30px;
+  }
+}
+

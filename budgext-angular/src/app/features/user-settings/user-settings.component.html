@@ -3,6 +3,17 @@
     <mat-card [formGroup]="formGroup">
       <h3>Benutzereinstellungen ändern</h3>
 
+      @if (formGroup.get('createdAt')?.value) {
+        <div class="creation-date">
+          <mat-icon>schedule</mat-icon>
+          <span>
+            Account erstellt am {{formGroup.get('createdAt')?.value?.toFormat('dd.MM.yyyy')}}
+            <br>
+            um {{formGroup.get('createdAt')?.value?.toFormat('HH:mm')}} Uhr
+          </span>
+        </div>
+      }
+
       <mat-form-field appearance="fill">
         <mat-label>E-Mail</mat-label>
         <input matInput type="email" formControlName="email" placeholder="Enter email" required>

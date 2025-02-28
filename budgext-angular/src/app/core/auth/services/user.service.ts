@@ -8,13 +8,13 @@ import {
   Observable,
   of,
   shareReplay,
-  takeUntil,
   tap,
 } from 'rxjs';
 import { JwtService } from './jwt.service';
 import { Router } from '@angular/router';
-import { User } from '../user.model';
+import { ApiUser, User } from '../user.model';
 import { TransactionService } from '../../../features/transactions/services/transaction.service';
+import { DateTime } from 'luxon';
 
 /**
  * Provides the interface of the response after a token gets requested
@@ -25,7 +25,6 @@ export interface UserAuthResponse {
 }
 
 // TODO Implement ngUnsubscribe
-
 @Injectable({
   providedIn: 'root'
 })
@@ -91,7 +90,11 @@ export class UserService {
    * @returns Observable<User> - Emits the current user data if the request is successful.
    */
   getCurrentUser(): Observable<User> {
-    return this.http.get<User>('/users/getUser').pipe(
+    return this.http.get<ApiUser>('/users/getUser').pipe(
+      map((currUser: ApiUser) => ({
+        ...currUser,
+        createdAt: DateTime.fromISO(currUser.createdAt)
+      })),
       tap({
         next: (user) => {
           this._currentUserSubject.next(user);
@@ -107,8 +110,12 @@ export class UserService {
   }
 
   updateUser(updatedUser: User): Observable<User> {
-    return this.http.patch<User>('/users/editUser/', updatedUser).pipe(
+    return this.http.patch<ApiUser>('/users/editUser/', updatedUser).pipe(
       shareReplay(1),
+      map((responseUser: ApiUser) => ({
+        ...responseUser,
+        createdAt: DateTime.fromISO(responseUser.createdAt)
+      })),
       tap((updatedUser) => {
         if (updatedUser && updatedUser.id) {
           this._currentUserSubject.next(updatedUser);
